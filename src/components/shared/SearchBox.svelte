@@ -135,6 +135,13 @@
                 </li>
               {/each}
             </ul>
+            <a
+              href={`/search?q=${encodeURIComponent(query)}`}
+              onclick={close}
+              class="block mt-3 px-4 py-2.5 rounded-lg text-center text-sm text-accent-blue hover:bg-bg-secondary border border-transparent hover:border-accent-blue/30 transition-colors"
+            >
+              查看全部搜索结果 &rarr;
+            </a>
           {/if}
         </div>
 
