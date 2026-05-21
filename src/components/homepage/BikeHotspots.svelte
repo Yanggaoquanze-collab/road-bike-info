@@ -1,20 +1,20 @@
 <script lang="ts">
   let activeLabel = $state("");
   let activePos = $state({ x: 0, y: 0 });
-  let tappedOnce = $state(false);
   let tappedTarget = $state("");
+  let tapCount = $state(0);
 
-  function onEnter(e) {
-    const g = e.currentTarget.closest(".hotspot-area");
+  function onEnter(e: Event) {
+    const g = (e.currentTarget as Element).closest(".hotspot-area") as HTMLElement | null;
     if (!g) return;
-    const path = g.querySelector(".hotspot-bg");
-    if (path) path.style.fill = "rgba(59, 130, 246, 0.12)";
-    g.style.filter = "url(#glow)";
+    setGlow(g, true);
     activeLabel = g.dataset.label || "";
   }
 
-  function onMove(e) {
-    const svg = e.currentTarget.closest("svg");
+  function onMove(e: MouseEvent) {
+    const g = (e.currentTarget as Element).closest(".hotspot-area") as HTMLElement | null;
+    if (!g) return;
+    const svg = g.closest("svg");
     if (!svg) return;
     const rect = svg.getBoundingClientRect();
     const scaleX = 800 / rect.width;
@@ -25,66 +25,82 @@
     };
   }
 
-  function onLeave(e) {
-    const g = e.currentTarget.closest(".hotspot-area");
+  function onLeave(e: Event) {
+    const g = (e.currentTarget as Element).closest(".hotspot-area") as HTMLElement | null;
     if (!g) return;
-    const path = g.querySelector(".hotspot-bg");
-    if (path) path.style.fill = "none";
-    g.style.filter = "";
+    setGlow(g, false);
     activeLabel = "";
   }
 
-  function onClick(e) {
-    const g = e.currentTarget.closest(".hotspot-area");
-    if (!g) return;
+  function setGlow(g: HTMLElement, on: boolean) {
+    const path = g.querySelector(".hotspot-bg") as SVGElement | null;
+    if (path) path.style.fill = on ? "rgba(59, 130, 246, 0.15)" : "none";
+    g.style.filter = on ? "url(#glow)" : "";
+  }
+
+  function navigate(g: HTMLElement) {
     const section = g.dataset.section || "/";
     const category = g.dataset.category || "";
     const url = category ? `${section}?category=${encodeURIComponent(category)}` : section;
     window.location.href = url;
   }
 
-  function onTouch(e) {
-    const g = e.currentTarget.closest(".hotspot-area");
+  function onClick(e: Event) {
+    const g = (e.currentTarget as Element).closest(".hotspot-area") as HTMLElement | null;
     if (!g) return;
-    const targetId = g.id;
-    if (!tappedOnce || tappedTarget !== targetId) {
-      e.preventDefault();
-      tappedOnce = true;
-      tappedTarget = targetId;
-      const path = g.querySelector(".hotspot-bg");
-      if (path) path.style.fill = "rgba(59, 130, 246, 0.12)";
-      g.style.filter = "url(#glow)";
+    // 如果是触摸后的第一次点击（tap-to-reveal），不导航
+    if (tapCount === 1 && tappedTarget === g.id) {
+      return;
+    }
+    navigate(g);
+  }
+
+  function onTouchStart(e: TouchEvent) {
+    const g = (e.currentTarget as Element).closest(".hotspot-area") as HTMLElement | null;
+    if (!g) return;
+    e.preventDefault();
+    if (tappedTarget !== g.id) {
+      tapCount = 1;
+      tappedTarget = g.id;
+      setGlow(g, true);
       activeLabel = g.dataset.label || "";
+      // 点击其他区域时清除之前的
       setTimeout(() => {
-        tappedOnce = false;
-        tappedTarget = "";
-      }, 2000);
+        if (tapCount === 1) {
+          setGlow(g, false);
+          activeLabel = "";
+          tapCount = 0;
+          tappedTarget = "";
+        }
+      }, 2500);
     } else {
-      const section = g.dataset.section || "/";
-      const category = g.dataset.category || "";
-      const url = category ? `${section}?category=${encodeURIComponent(category)}` : section;
-      window.location.href = url;
+      // 第二次点击同一区域 — 导航
+      tapCount = 2;
+      setGlow(g, false);
+      activeLabel = "";
+      tappedTarget = "";
+      navigate(g);
     }
   }
 
-  function mount(svg) {
-    if (!svg) return;
-    const areas = svg.querySelectorAll(".hotspot-area");
-    areas.forEach((area) => {
-      if ("ontouchstart" in window) {
-        area.addEventListener("touchstart", onTouch, { passive: false });
-      } else {
+  function mount(container: HTMLElement) {
+    if (!container) return;
+    // 用 requestAnimationFrame 确保 slot 内容已渲染
+    requestAnimationFrame(() => {
+      const areas = container.querySelectorAll(".hotspot-area");
+      areas.forEach((area) => {
         area.addEventListener("mouseenter", onEnter);
-        area.addEventListener("mousemove", onMove);
+        area.addEventListener("mousemove", onMove as EventListener);
         area.addEventListener("mouseleave", onLeave);
-      }
-      area.addEventListener("click", onClick);
+        area.addEventListener("click", onClick);
+        area.addEventListener("touchstart", onTouchStart, { passive: false });
+      });
     });
   }
 </script>
 
 <div class="relative max-w-2xl mx-auto">
-  <div use:mount class="bike-svg-container">
+  <div use:mount class="bike-svg-container cursor-pointer">
     <slot />
   </div>
 

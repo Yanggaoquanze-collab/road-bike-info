@@ -15,7 +15,7 @@ wheels: "Bontrager Aeolus RSL 51"
 tires: "Bontrager R4 320 700x25c"
 weight: 7.3
 sizes: ["50", "52", "54", "56", "58", "60"]
-image: "/images/bikes/trek-madone-slr-2025.svg"
+image: "/images/bikes/trek-madone-slr-2025.jpg"
 imageAttribution: "Trek Bicycles"
 officialUrl: "https://www.trekbikes.com/"
 tags: ["Trek", "Madone", "气动", "顶级", "SRAM Red"]

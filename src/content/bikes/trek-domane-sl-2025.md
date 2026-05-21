@@ -15,7 +15,7 @@ wheels: "Bontrager Paradigm Comp 25"
 tires: "Bontrager R3 Hard-Case Lite 700x32c"
 weight: 9.1
 sizes: ["50", "52", "54", "56", "58", "60"]
-image: "/images/bikes/trek-domane-sl-2025.svg"
+image: "/images/bikes/trek-domane-sl-2025.jpg"
 imageAttribution: "Trek Bicycles"
 officialUrl: "https://www.trekbikes.com/"
 tags: ["Trek", "Domane", "耐力", "电子变速", "长途"]

@@ -15,7 +15,7 @@ wheels: "Reserve 34/37 TA"
 tires: "Vittoria Corsa Pro 700x28c"
 weight: 6.4
 sizes: ["48", "51", "54", "56", "58"]
-image: "/images/bikes/cervelo-r5-2025.svg"
+image: "/images/bikes/cervelo-r5-2025.jpg"
 imageAttribution: "Cervelo"
 officialUrl: "https://www.cervelo.com/"
 tags: ["Cervelo", "R5", "爬坡", "顶级", "加拿大"]

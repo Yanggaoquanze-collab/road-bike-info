@@ -15,7 +15,7 @@ wheels: "Roval Rapide CLX II"
 tires: "S-Works Turbo Cotton 700x26c"
 weight: 6.6
 sizes: ["49", "52", "54", "56", "58"]
-image: "/images/bikes/specialized-sworks-tarmac-sl8-2025.svg"
+image: "/images/bikes/specialized-sworks-sl8-2025.jpg"
 imageAttribution: "Specialized Bicycles"
 officialUrl: "https://www.specialized.com.cn/"
 tags: ["Specialized", "S-Works", "SL8", "顶级", "Pro Tour"]
