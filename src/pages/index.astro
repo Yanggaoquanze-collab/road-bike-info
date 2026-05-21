@@ -1,0 +1,55 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../components/layout/Base.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import HeroBike from "../components/homepage/HeroBike.astro";
+import LatestNews from "../components/homepage/LatestNews.astro";
+import UpcomingEvents from "../components/homepage/UpcomingEvents.astro";
+import SymptomSearchInline from "../components/homepage/SymptomSearchInline.svelte";
+import PopularModels from "../components/homepage/PopularModels.astro";
+
+const news = await getCollection("news", ({ data }) => !data.draft);
+const sortedNews = news.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, 3);
+
+const events = await getCollection("events", ({ data }) => !data.draft && data.status === "upcoming");
+const sortedEvents = events.sort((a, b) => a.data.startDate.getTime() - b.data.startDate.getTime()).slice(0, 3);
+
+const bikes = await getCollection("bikes", ({ data }) => !data.draft);
+const featuredBikes = bikes.slice(0, 4);
+---
+
+<Base description="公路车新闻、赛事、维修排查、车型库 — 为骑行爱好者提供一站式信息平台">
+  <Header />
+  <main>
+    <section class="relative overflow-hidden py-12 md:py-20">
+      <div class="absolute inset-0 bg-gradient-to-b from-accent-blue/5 via-transparent to-transparent pointer-events-none" />
+      <HeroBike />
+    </section>
+
+    <section class="mx-auto max-w-7xl px-6 pb-16">
+      <LatestNews items={sortedNews} />
+    </section>
+
+    <section class="bg-bg-secondary/50 py-16">
+      <div class="mx-auto max-w-7xl px-6">
+        <UpcomingEvents items={sortedEvents} />
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-7xl px-6 py-16">
+      <div class="mb-8 text-center">
+        <h2 class="text-2xl font-bold text-text-primary mb-3">快速排查</h2>
+        <p class="text-text-tertiary">描述你的症状，找到解决方案</p>
+      </div>
+      <SymptomSearchInline client:load />
+    </section>
+
+    <section class="bg-bg-secondary/50 py-16">
+      <div class="mx-auto max-w-7xl px-6">
+        <PopularModels items={featuredBikes} />
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>

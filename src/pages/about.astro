@@ -1,0 +1,31 @@
+---
+import Base from "../components/layout/Base.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+---
+
+<Base title="关于本站" description="公路车信息网 — 了解本站的使命、内容声明与联系方式">
+  <Header />
+  <main class="mx-auto max-w-3xl px-6 py-12 fade-in">
+    <h1 class="text-3xl font-bold text-text-primary mb-6">关于本站</h1>
+    <div class="prose prose-invert max-w-none">
+      <p>公路车信息网是一个面向公路车骑行爱好者的信息平台，提供以下服务：</p>
+      <ul>
+        <li>每日更新的公路车新闻</li>
+        <li>国内外赛事信息</li>
+        <li>口语化描述的维修排查指南</li>
+        <li>最新车型数据库</li>
+      </ul>
+      <hr />
+      <h2>声明</h2>
+      <ul>
+        <li>维修排查内容仅供参考，不构成专业技师建议。重大故障请前往专业车店检修。</li>
+        <li>车型数据来自各品牌官网，仅供参考，以官方最新公布为准。</li>
+        <li>新闻内容部分由 AI 自动生成，仅供参考。</li>
+      </ul>
+      <h2>联系</h2>
+      <p>如有问题或建议，欢迎通过 GitHub Issues 联系。</p>
+    </div>
+  </main>
+  <Footer />
+</Base>

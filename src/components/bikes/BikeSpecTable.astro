@@ -1,0 +1,52 @@
+---
+interface SpecItem {
+  label: string;
+  value: string;
+}
+
+interface Props {
+  bike: {
+    brand: string;
+    model: string;
+    year: number;
+    frame: string;
+    fork?: string;
+    groupset: string;
+    groupsetType: string;
+    brakes: string;
+    wheels: string;
+    tires?: string;
+    weight: number;
+    sizes: string[];
+  };
+}
+
+const { bike } = Astro.props;
+const groupsetTypeLabel = bike.groupsetType === "electronic" ? "电子变速" : "机械变速";
+
+const specs: SpecItem[] = [
+  { label: "品牌", value: bike.brand },
+  { label: "型号", value: `${bike.model} (${bike.year})` },
+  { label: "车架", value: bike.frame },
+  { label: "前叉", value: bike.fork || bike.frame },
+  { label: "套件", value: `${bike.groupset} (${groupsetTypeLabel})` },
+  { label: "刹车", value: bike.brakes },
+  { label: "轮组", value: bike.wheels },
+  { label: "外胎", value: bike.tires || "-" },
+  { label: "重量", value: `${bike.weight} kg` },
+  { label: "尺码", value: bike.sizes.join(" / ") },
+];
+---
+
+<div class="rounded-xl overflow-hidden border border-surface-border">
+  <table class="w-full text-sm">
+    <tbody>
+      {specs.map((spec, i) => (
+        <tr class={i % 2 === 0 ? "bg-bg-secondary" : "bg-bg-primary"}>
+          <td class="px-5 py-3 text-text-tertiary w-24 font-medium">{spec.label}</td>
+          <td class="px-5 py-3 text-text-primary">{spec.value}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

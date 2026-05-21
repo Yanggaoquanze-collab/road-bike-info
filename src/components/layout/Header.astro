@@ -1,0 +1,47 @@
+---
+import { NAV } from "../../config";
+import MobileNav from "./MobileNav.svelte";
+import SearchBox from "../shared/SearchBox.svelte";
+---
+
+<header class="sticky top-0 z-50 border-b border-surface-border bg-bg-primary/80 backdrop-blur-xl">
+  <nav class="mx-auto max-w-7xl flex items-center justify-between px-6 py-4">
+    <a href="/" class="flex items-center gap-2">
+      <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="25" cy="24" r="4.5" stroke="url(#grad)" stroke-width="2"/>
+        <circle cx="7" cy="24" r="4.5" stroke="url(#grad)" stroke-width="2"/>
+        <path d="M7 24 L10 8 L16 4 L22 8 L25 24" stroke="url(#grad)" stroke-width="2" fill="none" stroke-linejoin="round"/>
+        <defs>
+          <linearGradient id="grad" x1="0" y1="0" x2="32" y2="0">
+            <stop stop-color="var(--color-accent-blue)"/>
+            <stop offset="1" stop-color="var(--color-accent-purple)"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="text-lg font-semibold text-text-primary tracking-tight">公路车信息网</span>
+    </a>
+
+    <!-- Desktop nav -->
+    <div class="hidden md:flex items-center gap-8">
+      {NAV.map(item => (
+        <a
+          href={item.href}
+          class="text-sm text-text-secondary hover:text-text-primary transition-colors
+            {Astro.url.pathname === item.href ? '!text-accent-blue' : ''}"
+        >
+          {item.label}
+        </a>
+      ))}
+    </div>
+
+    <!-- Search -->
+    <div class="flex items-center">
+      <SearchBox client:load />
+    </div>
+
+    <!-- Mobile nav trigger -->
+    <div class="md:hidden">
+      <MobileNav client:load />
+    </div>
+  </nav>
+</header>

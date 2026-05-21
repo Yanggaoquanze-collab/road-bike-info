@@ -1,0 +1,28 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../components/layout/Base.astro";
+import Header from "../../components/layout/Header.astro";
+import Footer from "../../components/layout/Footer.astro";
+import MaintenanceCard from "../../components/maintenance/MaintenanceCard.astro";
+import SymptomSearch from "../../components/maintenance/SymptomSearch.svelte";
+
+const allMaintenance = await getCollection("maintenance", ({ data }) => !data.draft);
+---
+
+<Base title="维修排查" description="口语化症状描述，精准定位故障 — 传动、制动、轮组、变速问题一站排查">
+  <Header />
+  <main class="mx-auto max-w-7xl px-6 py-12 fade-in">
+    <div class="mb-10 text-center max-w-2xl mx-auto">
+      <h1 class="text-3xl font-bold text-text-primary mb-3">维修排查</h1>
+      <p class="text-text-tertiary mb-8">用你的话描述症状，我们帮你找到原因</p>
+      <SymptomSearch client:load />
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {allMaintenance.map(item => (
+        <MaintenanceCard {...item.data} slug={item.id} />
+      ))}
+    </div>
+  </main>
+  <Footer />
+</Base>

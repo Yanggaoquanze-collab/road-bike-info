@@ -1,0 +1,28 @@
+---
+import BikeSvgInline from "./BikeSvgInline.astro";
+import BikeHotspots from "./BikeHotspots.svelte";
+---
+
+<div class="relative">
+  <div class="text-center mb-8">
+    <h1 class="text-4xl md:text-5xl font-bold text-text-primary tracking-tight mb-3">
+      公路车信息网
+    </h1>
+    <p class="text-lg text-text-tertiary max-w-lg mx-auto">
+      新闻 · 赛事 · 维修 · 车型 — 骑行爱好者的一站式平台
+    </p>
+  </div>
+
+  <BikeHotspots client:load>
+    <BikeSvgInline />
+  </BikeHotspots>
+
+  <div class="flex justify-center gap-8 mt-8 text-xs text-text-tertiary">
+    <span class="flex items-center gap-1.5">
+      <span class="w-1.5 h-1.5 rounded-full bg-accent-blue" /> 悬停车身各部位
+    </span>
+    <span class="flex items-center gap-1.5">
+      <span class="w-1.5 h-1.5 rounded-full bg-accent-purple" /> 点击跳转对应板块
+    </span>
+  </div>
+</div>

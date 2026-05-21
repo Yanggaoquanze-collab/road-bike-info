@@ -1,0 +1,7 @@
+exclude_selectors:
+  - ".pagefind-ignore"
+  - "nav"
+  - "footer"
+  - ".no-search"
+root_selector: "main"
+force_language: "zh"

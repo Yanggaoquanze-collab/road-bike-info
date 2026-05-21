@@ -1,0 +1,43 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../components/layout/Base.astro";
+import Header from "../../components/layout/Header.astro";
+import Footer from "../../components/layout/Footer.astro";
+import NewsCard from "../../components/news/NewsCard.astro";
+
+const allNews = await getCollection("news", ({ data }) => !data.draft);
+const sorted = allNews.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const grouped = new Map<string, typeof sorted>();
+for (const item of sorted) {
+  const key = item.data.date.toISOString().slice(0, 10);
+  if (!grouped.has(key)) grouped.set(key, []);
+  grouped.get(key)!.push(item);
+}
+---
+
+<Base title="新闻中心" description="公路车资讯速递 — 赛报、装备、行业动态，一站式掌握骑行圈大小事">
+  <Header />
+  <main class="mx-auto max-w-7xl px-6 py-12 fade-in">
+    <div class="mb-10">
+      <h1 class="text-3xl font-bold text-text-primary mb-2">新闻中心</h1>
+      <p class="text-text-tertiary">公路车领域最新动态</p>
+    </div>
+
+    <div class="max-w-3xl mx-auto space-y-12">
+      {[...grouped.entries()].map(([date, items]) => (
+        <section>
+          <h2 class="text-sm font-semibold text-text-tertiary mb-4 pb-2 border-b border-surface-border">
+            {date}
+          </h2>
+          <div class="space-y-4">
+            {items.map(item => (
+              <NewsCard {...item.data} slug={item.id} />
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  </main>
+  <Footer />
+</Base>

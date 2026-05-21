@@ -1,0 +1,38 @@
+---
+import TagPill from "../shared/TagPill.astro";
+import { BIKE_CATEGORIES } from "../../lib/constants";
+
+interface Props {
+  brand: string;
+  model: string;
+  year: number;
+  category: keyof typeof BIKE_CATEGORIES;
+  price: number;
+  groupset: string;
+  weight: number;
+  image: string;
+  tags: string[];
+  slug: string;
+}
+
+const { brand, model, year, category, price, groupset, weight, image, tags, slug } = Astro.props;
+const catLabel = BIKE_CATEGORIES[category];
+const formattedPrice = price >= 10000 ? `${(price / 10000).toFixed(1)}万` : `¥${price.toLocaleString()}`;
+---
+
+<a href={`/bikes/${slug}`} class="card overflow-hidden group">
+  <div class="aspect-[4/3] overflow-hidden bg-bg-tertiary">
+    <img src={image} alt={`${brand} ${model}`} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+  </div>
+  <div class="p-5">
+    <div class="flex items-center gap-2 mb-1">
+      <span class="text-xs text-text-tertiary">{brand}</span>
+      <TagPill label={catLabel} size="sm" color="purple" />
+    </div>
+    <h3 class="font-semibold text-text-primary group-hover:text-accent-blue transition-colors mb-2">{model} {year}</h3>
+    <div class="flex items-center justify-between text-sm">
+      <span class="text-accent-blue font-semibold">{formattedPrice}</span>
+      <span class="text-text-tertiary">{groupset} · {weight}kg</span>
+    </div>
+  </div>
+</a>

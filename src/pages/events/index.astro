@@ -1,0 +1,36 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../components/layout/Base.astro";
+import Header from "../../components/layout/Header.astro";
+import Footer from "../../components/layout/Footer.astro";
+import EventCard from "../../components/events/EventCard.astro";
+import EventTabs from "../../components/events/EventTabs.svelte";
+import EventFilters from "../../components/events/EventFilters.svelte";
+import { EVENT_LEVELS, EVENT_TYPES } from "../../lib/constants";
+
+const allEvents = await getCollection("events", ({ data }) => !data.draft);
+const upcoming = allEvents.filter(e => e.data.status === "upcoming").sort((a, b) => a.data.startDate.getTime() - b.data.startDate.getTime());
+const past = allEvents.filter(e => e.data.status === "completed").sort((a, b) => b.data.endDate.getTime() - a.data.endDate.getTime());
+---
+
+<Base title="赛事中心" description="国内外公路车赛事一览 — 世巡赛、洲际赛、业余赛，赛程信息与报名入口">
+  <Header />
+  <main class="mx-auto max-w-7xl px-6 py-12 fade-in">
+    <div class="mb-10">
+      <h1 class="text-3xl font-bold text-text-primary mb-2">赛事中心</h1>
+      <p class="text-text-tertiary">国内外公路车赛事一览</p>
+    </div>
+
+    <EventTabs client:load>
+      <div slot="upcoming" class="grid gap-4 md:grid-cols-2">
+        {upcoming.map(item => <EventCard {...item.data} slug={item.id} />)}
+        {upcoming.length === 0 && <p class="text-text-tertiary col-span-full text-center py-12">暂无即将开始的赛事</p>}
+      </div>
+      <div slot="past" class="grid gap-4 md:grid-cols-2">
+        {past.map(item => <EventCard {...item.data} slug={item.id} />)}
+        {past.length === 0 && <p class="text-text-tertiary col-span-full text-center py-12">暂无历史赛事</p>}
+      </div>
+    </EventTabs>
+  </main>
+  <Footer />
+</Base>

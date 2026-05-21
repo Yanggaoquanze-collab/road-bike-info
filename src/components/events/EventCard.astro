@@ -1,0 +1,40 @@
+---
+import Badge from "../shared/Badge.astro";
+import TagPill from "../shared/TagPill.astro";
+import { EVENT_LEVELS, EVENT_TYPES } from "../../lib/constants";
+
+interface Props {
+  title: string;
+  level: keyof typeof EVENT_LEVELS;
+  type: keyof typeof EVENT_TYPES;
+  region: string;
+  country: string;
+  startDate: Date;
+  endDate: Date;
+  location: string;
+  status: string;
+  summary: string;
+  tags: string[];
+  slug: string;
+}
+
+const { title, level, type, region, country, startDate, endDate, location, status, summary, tags, slug } = Astro.props;
+const levelInfo = EVENT_LEVELS[level];
+const typeLabel = EVENT_TYPES[type];
+const statusLabel = status === "upcoming" ? "即将开始" : status === "ongoing" ? "进行中" : "已结束";
+const statusColor = status === "upcoming" ? "green" : status === "ongoing" ? "amber" : "default";
+---
+
+<a href={`/events/${slug}`} class="card p-5 group">
+  <div class="flex items-center gap-2 mb-2">
+    <Badge label={levelInfo.label} color={levelInfo.color} variant="outline" />
+    <Badge label={statusLabel} color={statusColor} />
+  </div>
+  <h3 class="font-semibold text-text-primary group-hover:text-accent-blue transition-colors mb-2">{title}</h3>
+  <p class="text-sm text-text-secondary line-clamp-2 mb-3">{summary}</p>
+  <div class="flex items-center gap-3 text-xs text-text-tertiary">
+    <span>{startDate.toISOString().slice(0, 10)}{startDate.getTime() !== endDate.getTime() ? ` — ${endDate.toISOString().slice(0, 10)}` : ""}</span>
+    <span>·</span>
+    <span>{location}，{country}</span>
+  </div>
+</a>

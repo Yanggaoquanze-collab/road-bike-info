@@ -1,0 +1,25 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BikeCard from "../bikes/BikeCard.astro";
+
+interface Props {
+  items: CollectionEntry<"bikes">[];
+}
+
+const { items } = Astro.props;
+---
+
+<div>
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h2 class="text-xl font-bold text-text-primary">热门车型</h2>
+      <p class="text-sm text-text-tertiary mt-1">精选公路车推荐</p>
+    </div>
+    <a href="/bikes" class="text-sm text-accent-blue hover:text-blue-400 transition-colors">查看全部 &rarr;</a>
+  </div>
+  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+    {items.map(item => (
+      <BikeCard {...item.data} slug={item.id} />
+    ))}
+  </div>
+</div>

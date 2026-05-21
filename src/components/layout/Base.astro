@@ -1,0 +1,51 @@
+---
+import { SITE } from "../../config";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const { title, description, image, noindex } = Astro.props;
+const pageTitle = title ? `${title} — ${SITE.title}` : SITE.title;
+const pageDescription = description || SITE.description;
+const pageImage = image ? `${SITE.url}${image}` : `${SITE.url}/og-default.png`;
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="generator" content={Astro.generator} />
+
+  <!-- Primary Meta -->
+  <title>{pageTitle}</title>
+  <meta name="title" content={pageTitle} />
+  <meta name="description" content={pageDescription} />
+  {noindex && <meta name="robots" content="noindex, follow" />}
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={Astro.url} />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={pageDescription} />
+  <meta property="og:image" content={pageImage} />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content={Astro.url} />
+  <meta property="twitter:title" content={pageTitle} />
+  <meta property="twitter:description" content={pageDescription} />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <slot />
+</body>
+</html>

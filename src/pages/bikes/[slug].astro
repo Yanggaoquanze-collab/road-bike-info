@@ -1,0 +1,63 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../components/layout/Base.astro";
+import Header from "../../components/layout/Header.astro";
+import Footer from "../../components/layout/Footer.astro";
+import BikeSpecTable from "../../components/bikes/BikeSpecTable.astro";
+import TagPill from "../../components/shared/TagPill.astro";
+import { BIKE_CATEGORIES, PRICE_RANGES } from "../../lib/constants";
+import GiscusComments from "../../components/shared/GiscusComments.svelte";
+
+export async function getStaticPaths() {
+  const bikes = await getCollection("bikes");
+  return bikes.map((item) => ({ params: { slug: item.id } }));
+}
+
+const { slug } = Astro.params;
+const entry = await getCollection("bikes").then(items => items.find(i => i.id === slug));
+if (!entry) return Astro.redirect("/bikes");
+
+const { Content } = await entry.render();
+const catLabel = BIKE_CATEGORIES[entry.data.category];
+const priceLabel = PRICE_RANGES[entry.data.priceRange].label;
+const formattedPrice = entry.data.price >= 10000 ? `${(entry.data.price / 10000).toFixed(2)} 万` : `¥${entry.data.price.toLocaleString()}`;
+---
+
+<Base title={entry.data.title} description={`${entry.data.brand} ${entry.data.model} — ${entry.data.groupset}, ${entry.data.weight}kg`} image={entry.data.image}>
+  <Header />
+  <main class="mx-auto max-w-4xl px-6 py-12 fade-in">
+    <a href="/bikes" class="text-sm text-text-tertiary hover:text-text-secondary transition-colors mb-6 inline-block">&larr; 返回车型库</a>
+    <article>
+      <div class="card overflow-hidden mb-8">
+        <img src={entry.data.image} alt={entry.data.title} class="w-full h-80 object-cover" loading="eager" />
+        {entry.data.imageAttribution && (
+          <p class="px-4 py-2 text-xs text-text-tertiary text-right">图片来源：{entry.data.imageAttribution}</p>
+        )}
+      </div>
+
+      <div class="mb-8">
+        <div class="flex flex-wrap items-center gap-2 mb-3">
+          <TagPill label={entry.data.brand} color="blue" />
+          <TagPill label={catLabel} color="purple" />
+          <TagPill label={priceLabel} color="amber" />
+        </div>
+        <h1 class="text-3xl font-bold text-text-primary mb-1">{entry.data.title}</h1>
+        <p class="text-2xl font-semibold text-accent-blue mt-2">{formattedPrice}</p>
+      </div>
+
+      <BikeSpecTable bike={entry.data} />
+
+      {entry.data.officialUrl && (
+        <a href={entry.data.officialUrl} target="_blank" rel="noopener" class="inline-block mt-6 px-5 py-2.5 bg-bg-secondary border border-surface-border rounded-xl text-text-secondary hover:text-text-primary hover:border-text-tertiary transition-colors">
+          查看官网 &rarr;
+        </a>
+      )}
+
+      <div class="mt-10 prose prose-invert max-w-none">
+        <Content />
+      </div>
+    </article>
+    <GiscusComments client:load />
+  </main>
+  <Footer />
+</Base>

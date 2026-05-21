@@ -1,0 +1,25 @@
+---
+import type { CollectionEntry } from "astro:content";
+import NewsCard from "../news/NewsCard.astro";
+
+interface Props {
+  items: CollectionEntry<"news">[];
+}
+
+const { items } = Astro.props;
+---
+
+<div>
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h2 class="text-xl font-bold text-text-primary">最新动态</h2>
+      <p class="text-sm text-text-tertiary mt-1">公路车领域最新新闻</p>
+    </div>
+    <a href="/news" class="text-sm text-accent-blue hover:text-blue-400 transition-colors">查看全部 &rarr;</a>
+  </div>
+  <div class="grid gap-4 md:grid-cols-3">
+    {items.map(item => (
+      <NewsCard {...item.data} slug={item.id} />
+    ))}
+  </div>
+</div>

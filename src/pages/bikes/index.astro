@@ -1,0 +1,29 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../components/layout/Base.astro";
+import Header from "../../components/layout/Header.astro";
+import Footer from "../../components/layout/Footer.astro";
+import BikeCard from "../../components/bikes/BikeCard.astro";
+import BikeFilters from "../../components/bikes/BikeFilters.svelte";
+
+const allBikes = await getCollection("bikes", ({ data }) => !data.draft);
+---
+
+<Base title="车型库" description="最新公路车数据 — Giant、Trek、Specialized、Canyon 等品牌，详细配置与对比">
+  <Header />
+  <main class="mx-auto max-w-7xl px-6 py-12 fade-in">
+    <div class="mb-10">
+      <h1 class="text-3xl font-bold text-text-primary mb-2">车型库</h1>
+      <p class="text-text-tertiary">探索最新款公路车，对比配置</p>
+    </div>
+
+    <BikeFilters client:load />
+
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {allBikes.map(item => (
+        <BikeCard {...item.data} slug={item.id} />
+      ))}
+    </div>
+  </main>
+  <Footer />
+</Base>
