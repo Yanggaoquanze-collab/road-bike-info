@@ -16,9 +16,9 @@ const { items } = Astro.props;
       <h2 class="text-xl font-bold text-text-primary">最新动态</h2>
       <p class="text-sm text-text-tertiary mt-1">公路车领域最新新闻</p>
     </div>
-    <a href="/news" class="text-sm text-accent-blue hover:text-blue-400 transition-colors">查看全部 &rarr;</a>
+    <a href="/news" class="text-sm text-accent-blue hover:text-accent-blue transition-colors">查看全部 &rarr;</a>
   </div>
-  <div class="grid gap-4 md:grid-cols-3">
+  <div class="grid gap-4 grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))]">
     {items.map(item => (
       <NewsCard {...item.data} slug={slugify(item.id)} />
     ))}

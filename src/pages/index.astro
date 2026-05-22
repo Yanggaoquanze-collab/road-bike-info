@@ -23,21 +23,21 @@ const featuredBikes = bikes.slice(0, 4);
   <Header />
   <main>
     <section class="relative overflow-hidden py-12 md:py-20">
-      <div class="absolute inset-0 bg-gradient-to-b from-accent-blue/5 via-transparent to-transparent pointer-events-none" />
+      <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(circle at 50% 0%, rgba(200,60,40,0.08), transparent 60%);" />
       <HeroBike />
     </section>
 
-    <section class="mx-auto max-w-7xl px-6 pb-16">
+    <section class="mx-auto max-w-[1200px] px-6 pb-16">
       <LatestNews items={sortedNews} />
     </section>
 
     <section class="bg-bg-secondary/50 py-16">
-      <div class="mx-auto max-w-7xl px-6">
+      <div class="mx-auto max-w-[1200px] px-6">
         <UpcomingEvents items={sortedEvents} />
       </div>
     </section>
 
-    <section class="mx-auto max-w-7xl px-6 py-16">
+    <section class="mx-auto max-w-[1200px] px-6 py-16">
       <div class="mb-8 text-center">
         <h2 class="text-2xl font-bold text-text-primary mb-3">快速排查</h2>
         <p class="text-text-tertiary">描述你的症状，找到解决方案</p>
@@ -46,7 +46,7 @@ const featuredBikes = bikes.slice(0, 4);
     </section>
 
     <section class="bg-bg-secondary/50 py-16">
-      <div class="mx-auto max-w-7xl px-6">
+      <div class="mx-auto max-w-[1200px] px-6">
         <PopularModels items={featuredBikes} />
       </div>
     </section>

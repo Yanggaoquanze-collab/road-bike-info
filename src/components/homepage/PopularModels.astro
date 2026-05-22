@@ -16,9 +16,9 @@ const { items } = Astro.props;
       <h2 class="text-xl font-bold text-text-primary">热门车型</h2>
       <p class="text-sm text-text-tertiary mt-1">精选公路车推荐</p>
     </div>
-    <a href="/bikes" class="text-sm text-accent-blue hover:text-blue-400 transition-colors">查看全部 &rarr;</a>
+    <a href="/bikes" class="text-sm text-accent-blue hover:text-accent-blue transition-colors">查看全部 &rarr;</a>
   </div>
-  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+  <div class="grid gap-6 grid-cols-[repeat(auto-fit,_minmax(280px,_1fr))]">
     {items.map(item => (
       <BikeCard {...item.data} slug={slugify(item.id)} />
     ))}

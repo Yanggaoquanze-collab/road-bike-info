@@ -27,7 +27,7 @@
     />
     <button
       onclick={search}
-      class="px-6 py-3 bg-accent-blue text-white font-medium rounded-xl hover:bg-blue-600 transition-colors"
+      class="px-6 py-3 bg-accent-blue text-white font-medium rounded-xl hover:opacity-90 transition-colors"
     >
       搜索
     </button>

@@ -1,6 +1,7 @@
 ---
 import { SITE } from "../../config";
 import "../../styles/global.css";
+import BackToTop from "../shared/BackToTop.svelte";
 
 interface Props {
   title?: string;
@@ -47,5 +48,6 @@ const pageImage = image ? `${SITE.url}${image}` : `${SITE.url}/og-default.png`;
 </head>
 <body>
   <slot />
+  <BackToTop client:load />
 </body>
 </html>

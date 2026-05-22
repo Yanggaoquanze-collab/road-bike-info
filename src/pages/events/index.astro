@@ -14,18 +14,18 @@ const past = allEvents.filter(e => e.data.status === "completed").sort((a, b) =>
 
 <Base title="赛事中心" description="国内外公路车赛事一览 — 世巡赛、洲际赛、业余赛，赛程信息与报名入口">
   <Header />
-  <main class="mx-auto max-w-7xl px-6 py-12 fade-in">
+  <main class="mx-auto max-w-[1200px] px-6 py-12 fade-in">
     <div class="mb-10">
       <h1 class="text-3xl font-bold text-text-primary mb-2">赛事中心</h1>
       <p class="text-text-tertiary">国内外公路车赛事一览</p>
     </div>
 
     <EventTabs client:load>
-      <div slot="upcoming" class="grid gap-4 md:grid-cols-2">
+      <div slot="upcoming" class="grid gap-4 grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))]">
         {upcoming.map(item => <EventCard {...item.data} slug={slugify(item.id)} />)}
         {upcoming.length === 0 && <p class="text-text-tertiary col-span-full text-center py-12">暂无即将开始的赛事</p>}
       </div>
-      <div slot="past" class="grid gap-4 md:grid-cols-2">
+      <div slot="past" class="grid gap-4 grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))]">
         {past.map(item => <EventCard {...item.data} slug={slugify(item.id)} />)}
         {past.length === 0 && <p class="text-text-tertiary col-span-full text-center py-12">暂无历史赛事</p>}
       </div>

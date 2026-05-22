@@ -1,28 +1,34 @@
 ---
-import BikeSvgInline from "./BikeSvgInline.astro";
-import BikeHotspots from "./BikeHotspots.svelte";
 ---
 
-<div class="relative">
-  <div class="text-center mb-8">
-    <h1 class="text-4xl md:text-5xl font-bold text-text-primary tracking-tight mb-3">
-      公路车信息网
-    </h1>
-    <p class="text-lg text-text-tertiary max-w-lg mx-auto">
-      新闻 · 赛事 · 维修 · 车型 — 骑行爱好者的一站式平台
-    </p>
+<div class="relative max-w-[1280px] mx-auto px-6 text-center py-8 md:py-16">
+  <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-text-primary tracking-tight mb-4">
+    公路车信息网
+  </h1>
+  <p class="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mb-8">
+    你的公路车一站式信息平台 — 新闻、赛事、维修、车型，骑行爱好者都在这里
+  </p>
+
+  <div class="flex justify-center gap-4 mb-10">
+    <a href="/news" class="btn btn-primary">浏览新闻</a>
+    <a href="/bikes" class="btn btn-secondary">查看车型</a>
   </div>
 
-  <BikeHotspots client:load>
-    <BikeSvgInline />
-  </BikeHotspots>
-
-  <div class="flex justify-center gap-8 mt-8 text-xs text-text-tertiary">
+  <div class="flex justify-center gap-6 text-sm text-text-secondary mb-8">
     <span class="flex items-center gap-1.5">
-      <span class="w-1.5 h-1.5 rounded-full bg-accent-blue" /> 悬停车身各部位
+      <span class="w-1.5 h-1.5 rounded-full bg-accent-blue"></span> 每日资讯
     </span>
     <span class="flex items-center gap-1.5">
-      <span class="w-1.5 h-1.5 rounded-full bg-accent-purple" /> 点击跳转对应板块
+      <span class="w-1.5 h-1.5 rounded-full bg-accent-purple"></span> 车型数据库
+    </span>
+    <span class="flex items-center gap-1.5">
+      <span class="w-1.5 h-1.5 rounded-full bg-accent-green"></span> 维修指南
     </span>
   </div>
+
+  <div class="w-24 h-px bg-surface-border mx-auto mb-8"></div>
+
+  <p class="text-sm text-text-tertiary">
+    最新收录 <span class="text-accent-blue font-semibold">120+</span> 车型
+  </p>
 </div>
