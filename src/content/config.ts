@@ -16,6 +16,8 @@ const newsCollection = defineCollection({
     verified: z.boolean().default(false),
     crossSources: z.array(z.string()).default([]),
     confidence: z.enum(["high", "medium", "low"]).default("low"),
+    featured: z.boolean().default(false),
+    featuredImage: z.string().optional(),
   }),
 });
 
@@ -39,6 +41,8 @@ const eventsCollection = defineCollection({
     summary: z.string(),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
+    featured: z.boolean().default(false),
+    featuredImage: z.string().optional(),
   }),
 });
 

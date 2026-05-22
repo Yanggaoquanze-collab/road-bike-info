@@ -4,46 +4,93 @@ import Base from "../components/layout/Base.astro";
 import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
 import HeroBike from "../components/homepage/HeroBike.astro";
-import FeaturedCards from "../components/homepage/FeaturedCards.astro";
+import EditorialPicks from "../components/homepage/EditorialPicks.astro";
 import LatestNews from "../components/homepage/LatestNews.astro";
 import UpcomingEvents from "../components/homepage/UpcomingEvents.astro";
 import SymptomSearchInline from "../components/homepage/SymptomSearchInline.svelte";
 import PopularModels from "../components/homepage/PopularModels.astro";
+import BrandBanner from "../components/homepage/BrandBanner.astro";
+import { slugify } from "../lib/constants";
 
+// --- News (for LatestNews section) ---
 const news = await getCollection("news", ({ data }) => !data.draft);
 const sortedNews = news.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, 3);
 
+// --- Events (for UpcomingEvents section) ---
 const events = await getCollection("events", ({ data }) => !data.draft && data.status === "upcoming");
 const sortedEvents = events.sort((a, b) => a.data.startDate.getTime() - b.data.startDate.getTime()).slice(0, 3);
 
+// --- Bikes (for PopularModels section) ---
 const bikes = await getCollection("bikes", ({ data }) => !data.draft);
 const featuredBikes = bikes.slice(0, 4);
+
+// --- Editorial Picks: featured content from news and events ---
+const featuredNews = await getCollection("news", ({ data }) => !data.draft && data.featured === true);
+const featuredEvents = await getCollection("events", ({ data }) => !data.draft && data.featured === true);
+
+const editorialItems = [
+  ...featuredNews.map((item) => ({
+    id: item.id,
+    collection: "news" as const,
+    title: item.data.title,
+    summary: item.data.summary,
+    image: item.data.featuredImage || item.data.image,
+    date: item.data.date,
+    tags: item.data.tags,
+    slug: slugify(item.id),
+  })),
+  ...featuredEvents.map((item) => ({
+    id: item.id,
+    collection: "events" as const,
+    title: item.data.title,
+    summary: item.data.summary,
+    image: item.data.featuredImage || undefined,
+    date: item.data.startDate,
+    tags: item.data.tags,
+    slug: slugify(item.id),
+  })),
+]
+  .sort((a, b) => b.date.getTime() - a.date.getTime())
+  .slice(0, 3);
+
+const hasEditorialPicks = editorialItems.length > 0;
 ---
 
-<Base description="公路车新闻、赛事、维修排查、车型库 — 为骑行爱好者提供一站式信息平台">
+<Base description="在风里，找到速度的意义。公路车新闻、赛事、维修、车型库">
   <Header />
   <main>
-    <section class="relative overflow-hidden pt-12 md:pt-20 pb-20 md:pb-28">
-      <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(circle at 50% 0%, rgba(200,60,40,0.08), transparent 60%);" />
-      <!-- Geometric line art background -->
-      <div class="absolute inset-0 pointer-events-none flex items-center justify-center opacity-[0.07]">
-        <img src="/images/hero-line-art.svg" alt="" class="max-w-[700px] w-full text-accent-blue" aria-hidden="true" />
+    <!-- 1. Hero -->
+    <section class="relative overflow-hidden min-h-[80vh] flex items-center justify-center">
+      <div class="absolute inset-0" aria-hidden="true">
+        <img
+          src="/images/hero-photo.jpg"
+          alt=""
+          class="absolute inset-0 w-full h-full object-cover mix-blend-multiply"
+          style="opacity: 0.15; filter: blur(1px);"
+          loading="eager"
+        />
       </div>
+      <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 50% 10%, rgba(200,60,40,0.06), transparent 55%);"></div>
+      <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(to bottom, transparent 70%, rgba(250,250,248,0.5) 100%);"></div>
       <HeroBike />
     </section>
 
-    <FeaturedCards />
+    <!-- 2. Editorial Picks (conditional) -->
+    {hasEditorialPicks && <EditorialPicks items={editorialItems} />}
 
+    <!-- 3. Latest News -->
     <section class="mx-auto max-w-[1200px] px-6 py-20">
       <LatestNews items={sortedNews} />
     </section>
 
+    <!-- 4. Upcoming Events -->
     <section class="bg-bg-secondary/50 py-20">
       <div class="mx-auto max-w-[1200px] px-6">
         <UpcomingEvents items={sortedEvents} />
       </div>
     </section>
 
+    <!-- 5. Symptom Search -->
     <section class="mx-auto max-w-[1200px] px-6 py-20">
       <div class="mb-8 text-center">
         <h2 class="text-2xl font-bold text-text-primary mb-3">快速排查</h2>
@@ -52,6 +99,10 @@ const featuredBikes = bikes.slice(0, 4);
       <SymptomSearchInline client:load />
     </section>
 
+    <!-- 6. Brand Banner (dark rhythm break) -->
+    <BrandBanner />
+
+    <!-- 7. Popular Models -->
     <section class="bg-bg-secondary/50 py-20">
       <div class="mx-auto max-w-[1200px] px-6">
         <PopularModels items={featuredBikes} />
