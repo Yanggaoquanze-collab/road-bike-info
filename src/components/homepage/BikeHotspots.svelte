@@ -2,39 +2,40 @@
   let activeLabel = $state("");
   let activePos = $state({ x: 0, y: 0 });
   let tappedTarget = $state("");
-  let tapCount = $state(0);
+
+  function getArea(el: Element) {
+    return el.closest(".hotspot-area") as HTMLElement | null;
+  }
 
   function onEnter(e: Event) {
-    const g = (e.currentTarget as Element).closest(".hotspot-area") as HTMLElement | null;
+    const g = getArea(e.currentTarget as Element);
     if (!g) return;
     setGlow(g, true);
     activeLabel = g.dataset.label || "";
   }
 
   function onMove(e: MouseEvent) {
-    const g = (e.currentTarget as Element).closest(".hotspot-area") as HTMLElement | null;
+    const g = getArea(e.currentTarget as Element);
     if (!g) return;
-    const svg = g.closest("svg");
-    if (!svg) return;
-    const rect = svg.getBoundingClientRect();
-    const scaleX = 800 / rect.width;
-    const scaleY = 420 / rect.height;
+    const wrapper = g.closest(".bike-svg-wrapper") as HTMLElement | null;
+    if (!wrapper) return;
+    const rect = wrapper.getBoundingClientRect();
     activePos = {
-      x: (e.clientX - rect.left) * scaleX,
-      y: (e.clientY - rect.top) * scaleY - 20,
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top - 40,
     };
   }
 
   function onLeave(e: Event) {
-    const g = (e.currentTarget as Element).closest(".hotspot-area") as HTMLElement | null;
+    const g = getArea(e.currentTarget as Element);
     if (!g) return;
     setGlow(g, false);
     activeLabel = "";
   }
 
   function setGlow(g: HTMLElement, on: boolean) {
-    const path = g.querySelector(".hotspot-bg") as SVGElement | null;
-    if (path) path.style.fill = on ? "rgba(59, 130, 246, 0.15)" : "none";
+    const bg = g.querySelector(".hotspot-bg") as SVGElement | null;
+    if (bg) bg.setAttribute("fill", on ? "rgba(59, 130, 246, 0.15)" : "transparent");
     g.style.filter = on ? "url(#glow)" : "";
   }
 
@@ -46,49 +47,38 @@
   }
 
   function onClick(e: Event) {
-    const g = (e.currentTarget as Element).closest(".hotspot-area") as HTMLElement | null;
+    const g = getArea(e.currentTarget as Element);
     if (!g) return;
-    // 如果是触摸后的第一次点击（tap-to-reveal），不导航
-    if (tapCount === 1 && tappedTarget === g.id) {
-      return;
-    }
+    if (tappedTarget === g.id) return;
     navigate(g);
   }
 
   function onTouchStart(e: TouchEvent) {
-    const g = (e.currentTarget as Element).closest(".hotspot-area") as HTMLElement | null;
+    const g = getArea(e.currentTarget as Element);
     if (!g) return;
     e.preventDefault();
     if (tappedTarget !== g.id) {
-      tapCount = 1;
       tappedTarget = g.id;
       setGlow(g, true);
       activeLabel = g.dataset.label || "";
-      // 点击其他区域时清除之前的
       setTimeout(() => {
-        if (tapCount === 1) {
-          setGlow(g, false);
-          activeLabel = "";
-          tapCount = 0;
-          tappedTarget = "";
-        }
+        setGlow(g, false);
+        activeLabel = "";
+        tappedTarget = "";
       }, 2500);
     } else {
-      // 第二次点击同一区域 — 导航
-      tapCount = 2;
+      tappedTarget = "";
       setGlow(g, false);
       activeLabel = "";
-      tappedTarget = "";
       navigate(g);
     }
   }
 
   function mount(container: HTMLElement) {
-    if (!container) return;
-    // 用 requestAnimationFrame 确保 slot 内容已渲染
-    requestAnimationFrame(() => {
-      const areas = container.querySelectorAll(".hotspot-area");
-      areas.forEach((area) => {
+    const areas: Element[] = [];
+    const raf = requestAnimationFrame(() => {
+      container.querySelectorAll(".hotspot-area").forEach((area) => {
+        areas.push(area);
         area.addEventListener("mouseenter", onEnter);
         area.addEventListener("mousemove", onMove as EventListener);
         area.addEventListener("mouseleave", onLeave);
@@ -96,10 +86,22 @@
         area.addEventListener("touchstart", onTouchStart, { passive: false });
       });
     });
+    return {
+      destroy() {
+        cancelAnimationFrame(raf);
+        areas.forEach((area) => {
+          area.removeEventListener("mouseenter", onEnter);
+          area.removeEventListener("mousemove", onMove as EventListener);
+          area.removeEventListener("mouseleave", onLeave);
+          area.removeEventListener("click", onClick);
+          area.removeEventListener("touchstart", onTouchStart);
+        });
+      },
+    };
   }
 </script>
 
-<div class="relative max-w-2xl mx-auto">
+<div class="bike-svg-wrapper relative max-w-2xl mx-auto">
   <div use:mount class="bike-svg-container cursor-pointer">
     <slot />
   </div>
@@ -107,7 +109,7 @@
   {#if activeLabel}
     <div
       class="absolute pointer-events-none z-20 px-3 py-1.5 rounded-lg bg-bg-tertiary border border-surface-border text-sm text-text-primary font-medium shadow-lg whitespace-nowrap"
-      style="left: {(activePos.x / 800) * 100}%; top: {(activePos.y / 420) * 100}%"
+      style="left: {activePos.x}px; top: {activePos.y}px"
     >
       {activeLabel}
     </div>

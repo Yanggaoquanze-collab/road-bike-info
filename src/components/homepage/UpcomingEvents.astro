@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import EventCard from "../events/EventCard.astro";
+import { slugify } from "../../lib/constants";
 
 interface Props {
   items: CollectionEntry<"events">[];
@@ -19,7 +20,7 @@ const { items } = Astro.props;
   </div>
   <div class="grid gap-4 md:grid-cols-3">
     {items.map(item => (
-      <EventCard {...item.data} slug={item.id} />
+      <EventCard {...item.data} slug={slugify(item.id)} />
     ))}
     {items.length === 0 && (
       <p class="text-text-tertiary col-span-full text-center py-8">暂无近期赛事</p>

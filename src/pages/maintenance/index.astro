@@ -5,6 +5,7 @@ import Header from "../../components/layout/Header.astro";
 import Footer from "../../components/layout/Footer.astro";
 import MaintenanceCard from "../../components/maintenance/MaintenanceCard.astro";
 import SymptomSearch from "../../components/maintenance/SymptomSearch.svelte";
+import { slugify } from "../../lib/constants";
 
 const allMaintenance = await getCollection("maintenance", ({ data }) => !data.draft);
 ---
@@ -20,7 +21,7 @@ const allMaintenance = await getCollection("maintenance", ({ data }) => !data.dr
 
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {allMaintenance.map(item => (
-        <MaintenanceCard {...item.data} slug={item.id} />
+        <MaintenanceCard {...item.data} slug={slugify(item.id)} />
       ))}
     </div>
   </main>

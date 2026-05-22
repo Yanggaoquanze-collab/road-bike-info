@@ -1,3 +1,7 @@
+export function slugify(id: string) {
+  return id.replace(/\.md$/, "");
+}
+
 export const EVENT_LEVELS = {
   "WorldTour-International": { label: "世巡赛·国际", color: "amber", order: 1 },
   "WorldTour-Domestic": { label: "世巡赛·国内", color: "amber", order: 2 },

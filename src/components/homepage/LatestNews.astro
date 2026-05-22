@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import NewsCard from "../news/NewsCard.astro";
+import { slugify } from "../../lib/constants";
 
 interface Props {
   items: CollectionEntry<"news">[];
@@ -19,7 +20,7 @@ const { items } = Astro.props;
   </div>
   <div class="grid gap-4 md:grid-cols-3">
     {items.map(item => (
-      <NewsCard {...item.data} slug={item.id} />
+      <NewsCard {...item.data} slug={slugify(item.id)} />
     ))}
   </div>
 </div>

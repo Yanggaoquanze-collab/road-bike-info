@@ -5,16 +5,16 @@ import Header from "../../components/layout/Header.astro";
 import Footer from "../../components/layout/Footer.astro";
 import Badge from "../../components/shared/Badge.astro";
 import TagPill from "../../components/shared/TagPill.astro";
-import { EVENT_LEVELS, EVENT_TYPES } from "../../lib/constants";
+import { EVENT_LEVELS, EVENT_TYPES, slugify } from "../../lib/constants";
 import GiscusComments from "../../components/shared/GiscusComments.svelte";
 
 export async function getStaticPaths() {
   const events = await getCollection("events");
-  return events.map((item) => ({ params: { slug: item.id } }));
+  return events.map((item) => ({ params: { slug: slugify(item.id) } }));
 }
 
 const { slug } = Astro.params;
-const entry = await getCollection("events").then(items => items.find(i => i.id === slug));
+const entry = await getCollection("events").then(items => items.find(i => slugify(i.id) === slug));
 if (!entry) return Astro.redirect("/events");
 
 const { Content } = await entry.render();

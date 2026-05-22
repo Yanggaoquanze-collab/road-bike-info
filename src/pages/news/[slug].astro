@@ -5,14 +5,15 @@ import Header from "../../components/layout/Header.astro";
 import Footer from "../../components/layout/Footer.astro";
 import TagPill from "../../components/shared/TagPill.astro";
 import GiscusComments from "../../components/shared/GiscusComments.svelte";
+import { slugify } from "../../lib/constants";
 
 export async function getStaticPaths() {
   const news = await getCollection("news");
-  return news.map((item) => ({ params: { slug: item.id } }));
+  return news.map((item) => ({ params: { slug: slugify(item.id) } }));
 }
 
 const { slug } = Astro.params;
-const entry = await getCollection("news").then(items => items.find(i => i.id === slug));
+const entry = await getCollection("news").then(items => items.find(i => slugify(i.id) === slug));
 if (!entry) return Astro.redirect("/news");
 
 const { Content } = await entry.render();

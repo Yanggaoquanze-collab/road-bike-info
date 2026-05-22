@@ -5,6 +5,7 @@ import Header from "../../components/layout/Header.astro";
 import Footer from "../../components/layout/Footer.astro";
 import BikeCard from "../../components/bikes/BikeCard.astro";
 import BikeFilters from "../../components/bikes/BikeFilters.svelte";
+import { slugify } from "../../lib/constants";
 
 const allBikes = await getCollection("bikes", ({ data }) => !data.draft);
 ---
@@ -21,7 +22,7 @@ const allBikes = await getCollection("bikes", ({ data }) => !data.draft);
 
     <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {allBikes.map(item => (
-        <BikeCard {...item.data} slug={item.id} />
+        <BikeCard {...item.data} slug={slugify(item.id)} />
       ))}
     </div>
   </main>

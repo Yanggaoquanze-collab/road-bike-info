@@ -6,7 +6,7 @@ import Footer from "../../components/layout/Footer.astro";
 import EventCard from "../../components/events/EventCard.astro";
 import EventTabs from "../../components/events/EventTabs.svelte";
 import EventFilters from "../../components/events/EventFilters.svelte";
-import { EVENT_LEVELS, EVENT_TYPES } from "../../lib/constants";
+import { EVENT_LEVELS, EVENT_TYPES, slugify } from "../../lib/constants";
 
 const allEvents = await getCollection("events", ({ data }) => !data.draft);
 const upcoming = allEvents.filter(e => e.data.status === "upcoming").sort((a, b) => a.data.startDate.getTime() - b.data.startDate.getTime());
@@ -23,11 +23,11 @@ const past = allEvents.filter(e => e.data.status === "completed").sort((a, b) =>
 
     <EventTabs client:load>
       <div slot="upcoming" class="grid gap-4 md:grid-cols-2">
-        {upcoming.map(item => <EventCard {...item.data} slug={item.id} />)}
+        {upcoming.map(item => <EventCard {...item.data} slug={slugify(item.id)} />)}
         {upcoming.length === 0 && <p class="text-text-tertiary col-span-full text-center py-12">暂无即将开始的赛事</p>}
       </div>
       <div slot="past" class="grid gap-4 md:grid-cols-2">
-        {past.map(item => <EventCard {...item.data} slug={item.id} />)}
+        {past.map(item => <EventCard {...item.data} slug={slugify(item.id)} />)}
         {past.length === 0 && <p class="text-text-tertiary col-span-full text-center py-12">暂无历史赛事</p>}
       </div>
     </EventTabs>

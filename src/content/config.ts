@@ -3,6 +3,7 @@ import { defineCollection, z } from "astro:content";
 const newsCollection = defineCollection({
   type: "content",
   schema: z.object({
+    title: z.string(),
     date: z.date(),
     author: z.enum(["manual", "AI"]).default("manual"),
     source: z.string().optional(),
@@ -17,6 +18,7 @@ const newsCollection = defineCollection({
 const eventsCollection = defineCollection({
   type: "content",
   schema: z.object({
+    title: z.string(),
     titleEn: z.string().optional(),
     level: z.enum(["WorldTour-International", "WorldTour-Domestic", "Continental", "Amateur"]),
     type: z.enum(["stage-race", "one-day", "gran-fondo", "criterium"]),
@@ -39,6 +41,7 @@ const eventsCollection = defineCollection({
 const maintenanceCollection = defineCollection({
   type: "content",
   schema: z.object({
+    title: z.string(),
     category: z.enum(["传动系统", "制动系统", "轮组", "车架", "变速", "其他"]),
     difficulty: z.enum(["easy", "medium", "hard"]),
     symptoms: z.array(z.string()),
@@ -50,6 +53,7 @@ const maintenanceCollection = defineCollection({
 const bikesCollection = defineCollection({
   type: "content",
   schema: z.object({
+    title: z.string(),
     brand: z.string(),
     model: z.string(),
     year: z.number(),

@@ -4,6 +4,7 @@ import Base from "../../components/layout/Base.astro";
 import Header from "../../components/layout/Header.astro";
 import Footer from "../../components/layout/Footer.astro";
 import NewsCard from "../../components/news/NewsCard.astro";
+import { slugify } from "../../lib/constants";
 
 const allNews = await getCollection("news", ({ data }) => !data.draft);
 const sorted = allNews.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
@@ -32,7 +33,7 @@ for (const item of sorted) {
           </h2>
           <div class="space-y-4">
             {items.map(item => (
-              <NewsCard {...item.data} slug={item.id} />
+              <NewsCard {...item.data} slug={slugify(item.id)} />
             ))}
           </div>
         </section>

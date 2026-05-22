@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import BikeCard from "../bikes/BikeCard.astro";
+import { slugify } from "../../lib/constants";
 
 interface Props {
   items: CollectionEntry<"bikes">[];
@@ -19,7 +20,7 @@ const { items } = Astro.props;
   </div>
   <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
     {items.map(item => (
-      <BikeCard {...item.data} slug={item.id} />
+      <BikeCard {...item.data} slug={slugify(item.id)} />
     ))}
   </div>
 </div>
