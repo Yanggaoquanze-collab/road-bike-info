@@ -1,0 +1,40 @@
+---
+const cards = [
+  {
+    title: "今日赛事",
+    desc: "查看赛程与结果",
+    href: "/events",
+    icon: "M7 5h2v2H7V5zm4 0h2v2h-2V5zm4 0h2v2h-2V5zM5 9h14v2H5V9zm0 4h14v2H5v-2zm8 4h-2v3H8v-3H5v-2h14v2h-3v3h-3v-3z",
+  },
+  {
+    title: "推荐车型",
+    desc: "精选热门公路车",
+    href: "/bikes",
+    icon: "M17.66 8.34L12 2.68 6.34 8.34A8.02 8.02 0 0 0 4 13.64V21h16v-7.36a8.02 8.02 0 0 0-2.34-5.3zM12 5.5l3.5 3.5H16v5H8V9h.5L12 5.5zM8 15h8v4H8v-4z",
+  },
+  {
+    title: "最新新闻",
+    desc: "公路车资讯速递",
+    href: "/news",
+    icon: "M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H8v-2h4v2zm4-4H8v-2h8v2zm0-4H8V7h8v2z",
+  },
+];
+---
+
+<div class="max-w-[1200px] mx-auto px-6 -mt-8 relative z-10">
+  <div class="grid gap-4 grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))]">
+    {cards.map(card => (
+      <a href={card.href} class="group block bg-white/70 backdrop-blur-md border border-surface-border rounded-xl p-5 transition-all duration-[220ms] ease-out hover:bg-white/90 hover:border-accent-blue/30 hover:-translate-y-1 hover:shadow-lg">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-9 h-9 rounded-lg bg-accent-blue/10 flex items-center justify-center text-accent-blue group-hover:bg-accent-blue/15 transition-colors duration-[220ms]">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d={card.icon}/>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-sm text-text-primary">{card.title}</h3>
+        </div>
+        <p class="text-xs text-text-tertiary leading-relaxed">{card.desc}</p>
+      </a>
+    ))}
+  </div>
+</div>

@@ -97,7 +97,7 @@
         <li>
           <a
             href={result.url}
-            class="block px-5 py-4 rounded-xl bg-bg-secondary border border-surface-border hover:border-accent-blue transition-colors group"
+            class="block px-5 py-4 card-sm group"
           >
             <p class="text-base font-medium text-text-primary group-hover:text-accent-blue transition-colors">
               {result.title}

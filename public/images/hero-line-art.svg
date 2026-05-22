@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.12">
+  <g transform="translate(180,50) scale(0.65)">
+    <!-- Rear wheel -->
+    <circle cx="130" cy="240" r="72"/>
+    <circle cx="130" cy="240" r="66" stroke-width="0.4"/>
+    <!-- Front wheel -->
+    <circle cx="420" cy="240" r="72"/>
+    <circle cx="420" cy="240" r="66" stroke-width="0.4"/>
+    <!-- Chainring -->
+    <circle cx="225" cy="175" r="38"/>
+    <circle cx="225" cy="175" r="6" stroke-width="1.2"/>
+    <!-- Chainstay -->
+    <line x1="130" y1="240" x2="225" y2="175"/>
+    <!-- Seat stay -->
+    <line x1="130" y1="240" x2="195" y2="95"/>
+    <!-- Seat tube -->
+    <line x1="225" y1="175" x2="195" y2="95"/>
+    <!-- Top tube -->
+    <line x1="195" y1="95" x2="340" y2="75"/>
+    <!-- Down tube -->
+    <line x1="225" y1="175" x2="340" y2="75"/>
+    <!-- Fork -->
+    <line x1="420" y1="240" x2="340" y2="75"/>
+    <!-- Handlebar stem -->
+    <line x1="340" y1="75" x2="365" y2="55"/>
+    <!-- Handlebar -->
+    <path d="M350 55 Q365 45 380 55" stroke-width="1.2"/>
+    <!-- Seat post -->
+    <line x1="195" y1="95" x2="188" y2="80"/>
+    <!-- Saddle -->
+    <path d="M175 80 L200 80" stroke-width="2"/>
+    <!-- Pedal crank -->
+    <line x1="225" y1="175" x2="235" y2="195" stroke-width="1.2"/>
+    <!-- Pedal -->
+    <line x1="228" y1="195" x2="242" y2="195" stroke-width="1.5"/>
+  </g>
+</svg>

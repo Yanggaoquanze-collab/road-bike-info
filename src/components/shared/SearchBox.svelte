@@ -123,7 +123,7 @@
                   <a
                     href={result.url}
                     onclick={close}
-                    class="block px-4 py-3 rounded-lg bg-bg-secondary border border-surface-border hover:border-accent-blue transition-colors"
+                    class="block px-4 py-3 card-sm"
                   >
                     <p class="text-sm font-medium text-text-primary">{result.title}</p>
                     {#if result.excerpt}

@@ -26,7 +26,7 @@
 
 <!-- svelte-ignore a11y_no_noninteractive_element_interaction -->
 {#if open}
-  <div class="fixed inset-0 top-[57px] z-40" onclick={close} onkeydown={(e) => e.key === "Escape" && close()}>
+  <div class="fixed inset-0 top-16 z-40" onclick={close} onkeydown={(e) => e.key === "Escape" && close()}>
     <div class="absolute inset-0 bg-bg-primary/95 backdrop-blur-sm" />
     <nav class="relative flex flex-col items-center gap-6 pt-16">
       {#each NAV as item}

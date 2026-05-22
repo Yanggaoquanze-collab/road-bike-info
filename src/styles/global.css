@@ -1,5 +1,28 @@
 @import "tailwindcss";
 
+/* Inter @font-face — 自托管 woff2，拉丁字符/数字专用 */
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter-medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter-semibold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   /* surface */
   --color-bg-primary: #fafaf8;
@@ -29,7 +52,7 @@
   --color-bg-success: #4a9e6b;
   --color-bg-error: #d6403a;
 
-  --font-sans: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans SC", system-ui, -apple-system, sans-serif;
+  --font-sans: "Inter", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", system-ui, -apple-system, sans-serif;
   --font-mono: "Cascadia Code", "Fira Code", "JetBrains Mono", monospace;
 }
 
@@ -157,17 +180,37 @@
     font-weight: 600;
   }
 
-  /* card */
+  /* card — 主交互卡片：上浮 + 阴影增强 */
   .card {
     background: var(--color-bg-secondary);
     border: 1px solid var(--color-surface-border);
     border-radius: 12px;
-    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    transition: all 220ms ease-out;
   }
   .card:hover {
+    border-color: rgba(200, 60, 40, 0.18);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    transform: translateY(-4px);
+  }
+
+  /* card-sm — 次要交互元素：仅边框增强，不上浮 */
+  .card-sm {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-surface-border);
+    border-radius: 10px;
+    transition: border-color 220ms ease-out;
+  }
+  .card-sm:hover {
     border-color: var(--color-accent-blue);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-    transform: translateY(-2px);
+  }
+
+  /* card-static — 卡片外观但无交互（详情页图片容器等） */
+  .card-static {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-surface-border);
+    border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   }
 
   /* button system */
@@ -178,7 +221,7 @@
     border-radius: 0.5rem;
     padding: 0.5rem 1rem;
     font-weight: 500;
-    transition: opacity 0.2s, background-color 0.2s;
+    transition: all 220ms ease-out;
     cursor: pointer;
   }
   .btn-primary {
@@ -253,6 +296,36 @@
   .fade-in {
     animation: fade-in 0.4s ease-out;
   }
+
+  /* motion-image — 图片 hover 微缩放 */
+  .motion-image {
+    transition: transform 400ms ease-out;
+  }
+  .motion-image:hover {
+    transform: scale(1.02);
+  }
+
+  /* stagger — 列表交错入场 */
+  @keyframes fade-in-up-stagger {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .stagger-item {
+    opacity: 0;
+    animation: fade-in-up-stagger 500ms ease-out forwards;
+  }
+  .stagger-1 { animation-delay: 0ms; }
+  .stagger-2 { animation-delay: 80ms; }
+  .stagger-3 { animation-delay: 160ms; }
+  .stagger-4 { animation-delay: 240ms; }
+  .stagger-5 { animation-delay: 320ms; }
+  .stagger-6 { animation-delay: 400ms; }
 }
 
 /* focus ring */

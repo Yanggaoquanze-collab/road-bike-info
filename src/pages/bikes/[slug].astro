@@ -25,10 +25,10 @@ const formattedPrice = entry.data.price >= 10000 ? `${(entry.data.price / 10000)
 
 <Base title={entry.data.title} description={`${entry.data.brand} ${entry.data.model} — ${entry.data.groupset}, ${entry.data.weight}kg`} image={entry.data.image}>
   <Header />
-  <main class="mx-auto max-w-4xl px-6 py-12 fade-in">
+  <main class="mx-auto max-w-4xl px-6 py-16 fade-in">
     <a href="/bikes" class="text-sm text-text-tertiary hover:text-text-secondary transition-colors mb-6 inline-block">&larr; 返回车型库</a>
     <article>
-      <div class="card overflow-hidden mb-8">
+      <div class="card-static overflow-hidden mb-8">
         <img src={entry.data.image} alt={entry.data.title} class="w-full h-80 object-cover" loading="eager" />
         {entry.data.imageAttribution && (
           <p class="px-4 py-2 text-xs text-text-tertiary text-right">图片来源：{entry.data.imageAttribution}</p>

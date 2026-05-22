@@ -12,7 +12,7 @@ const allBikes = await getCollection("bikes", ({ data }) => !data.draft);
 
 <Base title="车型库" description="最新公路车数据 — Giant、Trek、Specialized、Canyon 等品牌，详细配置与对比">
   <Header />
-  <main class="mx-auto max-w-[1200px] px-6 py-12 fade-in">
+  <main class="mx-auto max-w-[1200px] px-6 py-16 fade-in">
     <div class="mb-10">
       <h1 class="text-3xl font-bold text-text-primary mb-2">车型库</h1>
       <p class="text-text-tertiary">探索最新款公路车，对比配置</p>
@@ -20,7 +20,7 @@ const allBikes = await getCollection("bikes", ({ data }) => !data.draft);
 
     <BikeFilters client:load />
 
-    <div class="grid gap-6 grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))]">
+    <div class="grid gap-4 grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))]">
       {allBikes.map(item => (
         <BikeCard {...item.data} slug={slugify(item.id)} />
       ))}

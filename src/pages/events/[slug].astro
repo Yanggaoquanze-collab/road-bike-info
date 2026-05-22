@@ -24,7 +24,7 @@ const typeLabel = EVENT_TYPES[entry.data.type];
 
 <Base title={entry.data.title} description={entry.data.summary} image={entry.data.routeMap}>
   <Header />
-  <main class="mx-auto max-w-3xl px-6 py-12 fade-in">
+  <main class="mx-auto max-w-3xl px-6 py-16 fade-in">
     <a href="/events" class="text-sm text-text-tertiary hover:text-text-secondary transition-colors mb-6 inline-block">&larr; 返回赛事列表</a>
     <article>
       <div class="mb-8">
@@ -39,7 +39,7 @@ const typeLabel = EVENT_TYPES[entry.data.type];
         <p class="text-text-secondary">{entry.data.summary}</p>
       </div>
 
-      <div class="card p-6 mb-8 grid gap-4 sm:grid-cols-2">
+      <div class="card-static p-6 mb-8 grid gap-4 sm:grid-cols-2">
         <div>
           <span class="text-xs text-text-tertiary uppercase tracking-wider">日期</span>
           <p class="text-text-primary font-medium">
