@@ -1,6 +1,6 @@
 export const SITE = {
-  title: "公路车信息网",
-  description: "公路车新闻、赛事、维修排查、车型库 — 为骑行爱好者提供一站式信息平台",
+  title: "骑迹",
+  description: "骑迹 — 公路车新闻、赛事、维修排查、车型库，骑行爱好者的一站式信息平台",
   url: "https://roadbike.vercel.app",
   author: "九方歅",
   locale: "zh-CN",
