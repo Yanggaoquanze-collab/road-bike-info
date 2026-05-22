@@ -5,7 +5,6 @@ import Header from "../../components/layout/Header.astro";
 import Footer from "../../components/layout/Footer.astro";
 import EventCard from "../../components/events/EventCard.astro";
 import EventTabs from "../../components/events/EventTabs.svelte";
-import EventFilters from "../../components/events/EventFilters.svelte";
 import { EVENT_LEVELS, EVENT_TYPES, slugify } from "../../lib/constants";
 
 const allEvents = await getCollection("events", ({ data }) => !data.draft);

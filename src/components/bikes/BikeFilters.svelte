@@ -5,13 +5,6 @@
   let activePriceRange = $state("");
   let activeCategory = $state("");
 
-  $effect(() => {
-    const params = new URLSearchParams(window.location.search);
-    activeBrand = params.get("brand") || "";
-    activePriceRange = params.get("priceRange") || "";
-    activeCategory = params.get("category") || "";
-  });
-
   const brands = ["Giant", "Merida", "Trek", "Specialized", "Canyon", "Cannondale", "Pinarello", "Cervelo", "Factor", "Wilier"];
   const priceRanges = [
     { value: "entry", label: "入门" },
@@ -20,18 +13,41 @@
   ];
   const categories = Object.entries(BIKE_CATEGORIES);
 
+  $effect(() => {
+    const params = new URLSearchParams(window.location.search);
+    activeBrand = params.get("brand") || "";
+    activePriceRange = params.get("priceRange") || "";
+    activeCategory = params.get("category") || "";
+    applyFilters();
+  });
+
+  function applyFilters() {
+    const cards = document.querySelectorAll<HTMLElement>("[data-bike-card]");
+    cards.forEach((card) => {
+      const brand = card.dataset.brand || "";
+      const category = card.dataset.category || "";
+      const priceRange = card.dataset.priceRange || "";
+      const match =
+        (!activeBrand || brand === activeBrand) &&
+        (!activePriceRange || priceRange === activePriceRange) &&
+        (!activeCategory || category === activeCategory);
+      card.style.display = match ? "" : "none";
+    });
+  }
+
   function update() {
     const p = new URLSearchParams();
     if (activeBrand) p.set("brand", activeBrand);
     if (activePriceRange) p.set("priceRange", activePriceRange);
     if (activeCategory) p.set("category", activeCategory);
     const search = p.toString();
-    window.location.search = search ? `?${search}` : "";
+    const url = search ? `?${search}` : window.location.pathname;
+    history.replaceState(null, "", url);
+    applyFilters();
   }
 </script>
 
 <div class="flex flex-wrap gap-4 mb-8">
-  <!-- Brand -->
   <div class="flex-1 min-w-[200px]">
     <label class="block text-xs text-text-tertiary mb-2">品牌</label>
     <select
@@ -46,7 +62,6 @@
     </select>
   </div>
 
-  <!-- Price range -->
   <div class="flex-1 min-w-[150px]">
     <label class="block text-xs text-text-tertiary mb-2">价位</label>
     <div class="flex gap-1">
@@ -63,7 +78,6 @@
     </div>
   </div>
 
-  <!-- Category -->
   <div class="flex-1 min-w-[200px]">
     <label class="block text-xs text-text-tertiary mb-2">类型</label>
     <div class="flex flex-wrap gap-1">

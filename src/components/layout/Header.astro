@@ -26,7 +26,7 @@ import SearchBox from "../shared/SearchBox.svelte";
       {NAV.map(item => (
         <a
           href={item.href}
-          class={`text-sm text-text-secondary hover:text-text-primary transition-colors ${Astro.url.pathname === item.href ? '!text-accent-blue' : ''}`}
+          class={`text-sm text-text-secondary hover:text-text-primary transition-colors ${Astro.url.pathname === item.href || (item.href !== '/' && Astro.url.pathname.startsWith(item.href)) ? '!text-accent-blue' : ''}`}
         >
           {item.label}
         </a>

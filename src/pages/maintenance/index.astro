@@ -5,6 +5,7 @@ import Header from "../../components/layout/Header.astro";
 import Footer from "../../components/layout/Footer.astro";
 import MaintenanceCard from "../../components/maintenance/MaintenanceCard.astro";
 import SymptomSearch from "../../components/maintenance/SymptomSearch.svelte";
+import MaintenanceSearchFilter from "../../components/maintenance/MaintenanceSearchFilter.svelte";
 import { slugify } from "../../lib/constants";
 
 const allMaintenance = await getCollection("maintenance", ({ data }) => !data.draft);
@@ -17,6 +18,7 @@ const allMaintenance = await getCollection("maintenance", ({ data }) => !data.dr
       <h1 class="text-3xl font-bold text-text-primary mb-3">维修排查</h1>
       <p class="text-text-tertiary mb-8">用你的话描述症状，我们帮你找到原因</p>
       <SymptomSearch client:load />
+      <MaintenanceSearchFilter client:load />
     </div>
 
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

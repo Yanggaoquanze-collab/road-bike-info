@@ -13,11 +13,13 @@ interface Props {
 
 const { title, category, difficulty, symptoms, tags, slug } = Astro.props;
 const diff = DIFFICULTY[difficulty];
+const diffColor = { green: "bg-accent-green", amber: "bg-accent-amber", red: "bg-accent-red" }[diff.color];
+const searchText = [title, category, ...symptoms, ...tags].join(" ");
 ---
 
-<a href={`/maintenance/${slug}`} class="card p-5 group">
+<a href={`/maintenance/${slug}`} class="card p-5 group maintenance-card" data-search-text={searchText}>
   <div class="flex items-center gap-2 mb-2">
-    <span class={`inline-block w-2 h-2 rounded-full bg-accent-${diff.color}`} />
+    <span class={`inline-block w-2 h-2 rounded-full ${diffColor}`} />
     <span class="text-xs text-text-tertiary">{diff.label}</span>
     <TagPill label={category} size="sm" color="blue" />
   </div>

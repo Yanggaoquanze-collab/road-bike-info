@@ -2,6 +2,7 @@
   let activeLabel = $state("");
   let activePos = $state({ x: 0, y: 0 });
   let tappedTarget = $state("");
+  let tapTimeout: ReturnType<typeof setTimeout> | null = null;
 
   function getArea(el: Element) {
     return el.closest(".hotspot-area") as HTMLElement | null;
@@ -58,13 +59,19 @@
     if (!g) return;
     e.preventDefault();
     if (tappedTarget !== g.id) {
+      const prev = document.getElementById(tappedTarget);
+      if (prev) setGlow(prev, false);
+      if (tapTimeout !== null) clearTimeout(tapTimeout);
       tappedTarget = g.id;
       setGlow(g, true);
       activeLabel = g.dataset.label || "";
-      setTimeout(() => {
-        setGlow(g, false);
-        activeLabel = "";
-        tappedTarget = "";
+      const targetId = g.id;
+      tapTimeout = setTimeout(() => {
+        if (tappedTarget === targetId) {
+          setGlow(g, false);
+          activeLabel = "";
+          tappedTarget = "";
+        }
       }, 2500);
     } else {
       tappedTarget = "";
@@ -89,6 +96,7 @@
     return {
       destroy() {
         cancelAnimationFrame(raf);
+        if (tapTimeout !== null) clearTimeout(tapTimeout);
         areas.forEach((area) => {
           area.removeEventListener("mouseenter", onEnter);
           area.removeEventListener("mousemove", onMove as EventListener);

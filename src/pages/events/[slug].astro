@@ -67,7 +67,7 @@ const typeLabel = EVENT_TYPES[entry.data.type];
       )}
 
       {entry.data.status === "upcoming" && entry.data.registrationUrl && (
-        <a href={entry.data.registrationUrl} target="_blank" rel="noopener" class="inline-block mb-8 px-6 py-3 bg-accent-blue text-white font-semibold rounded-xl hover:bg-blue-600 transition-colors">
+        <a href={entry.data.registrationUrl} target="_blank" rel="noopener noreferrer" class="inline-block mb-8 px-6 py-3 bg-accent-blue text-white font-semibold rounded-xl hover:bg-blue-600 transition-colors">
           前往报名
         </a>
       )}

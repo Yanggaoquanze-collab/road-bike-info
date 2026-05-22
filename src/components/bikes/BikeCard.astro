@@ -17,10 +17,11 @@ interface Props {
 
 const { brand, model, year, category, price, groupset, weight, image, tags, slug } = Astro.props;
 const catLabel = BIKE_CATEGORIES[category];
-const formattedPrice = price >= 10000 ? `${(price / 10000).toFixed(1)}万` : `¥${price.toLocaleString()}`;
+const formattedPrice = price >= 10000 ? `${(price / 10000).toFixed(2)} 万` : `¥${price.toLocaleString()}`;
+const priceRange = price < 20000 ? "entry" : price <= 50000 ? "mid" : "high";
 ---
 
-<a href={`/bikes/${slug}`} class="card overflow-hidden group">
+<a href={`/bikes/${slug}`} class="card overflow-hidden group" data-bike-card data-brand={brand} data-category={category} data-price-range={priceRange}>
   <div class="aspect-[4/3] overflow-hidden bg-bg-tertiary">
     <img src={image} alt={`${brand} ${model}`} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
   </div>

@@ -38,7 +38,7 @@
       <p class="text-text-secondary text-sm mb-3">评论功能尚未配置</p>
       <p class="text-text-tertiary text-xs">
         部署前请在 <code class="px-1 py-0.5 bg-bg-primary border border-surface-border rounded text-[11px]">src/config.ts</code> 中填入你的 GitHub 仓库信息和
-        <a href="https://giscus.app/zh-CN" target="_blank" rel="noopener" class="text-accent-blue hover:underline">Giscus</a> 配置
+        <a href="https://giscus.app/zh-CN" target="_blank" rel="noopener noreferrer" class="text-accent-blue hover:underline">Giscus</a> 配置
       </p>
     </div>
   {:else}

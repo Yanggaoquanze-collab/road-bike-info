@@ -1,5 +1,5 @@
 export function slugify(id: string) {
-  return id.replace(/\.md$/, "");
+  return id.replace(/\.mdx?$/i, "");
 }
 
 export const EVENT_LEVELS = {

@@ -48,7 +48,7 @@ const formattedPrice = entry.data.price >= 10000 ? `${(entry.data.price / 10000)
       <BikeSpecTable bike={entry.data} />
 
       {entry.data.officialUrl && (
-        <a href={entry.data.officialUrl} target="_blank" rel="noopener" class="inline-block mt-6 px-5 py-2.5 bg-bg-secondary border border-surface-border rounded-xl text-text-secondary hover:text-text-primary hover:border-text-tertiary transition-colors">
+        <a href={entry.data.officialUrl} target="_blank" rel="noopener noreferrer" class="inline-block mt-6 px-5 py-2.5 bg-bg-secondary border border-surface-border rounded-xl text-text-secondary hover:text-text-primary hover:border-text-tertiary transition-colors">
           查看官网 &rarr;
         </a>
       )}
