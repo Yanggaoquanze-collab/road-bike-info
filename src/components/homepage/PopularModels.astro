@@ -18,9 +18,22 @@ const { items } = Astro.props;
     </div>
     <a href="/bikes" class="text-sm text-accent-blue hover:text-accent-blue transition-colors">查看全部 &rarr;</a>
   </div>
-  <div class="grid gap-5 grid-cols-1 md:grid-cols-2">
-    {items.slice(0, 4).map(item => (
-      <BikeMagazineCard {...item.data} slug={slugify(item.id)} />
-    ))}
+
+  <!-- asymmetric magazine grid: 3-col base, varied spans -->
+  <div class="grid gap-5 grid-cols-1 md:grid-cols-3">
+    {items.slice(0, 4).map((item, i) => {
+      const layouts = [
+        { col: "md:col-span-2", aspect: "16/9" },
+        { col: "md:col-span-1", aspect: "3/4" },
+        { col: "md:col-span-1", aspect: "3/4" },
+        { col: "md:col-span-2", aspect: "16/9" },
+      ];
+      const layout = layouts[i];
+      return (
+        <div class={layout.col}>
+          <BikeMagazineCard {...item.data} slug={slugify(item.id)} aspect={layout.aspect} />
+        </div>
+      );
+    })}
   </div>
 </div>

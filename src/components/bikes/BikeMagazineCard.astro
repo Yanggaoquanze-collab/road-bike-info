@@ -11,15 +11,16 @@ interface Props {
   weight: number;
   image: string;
   slug: string;
+  aspect?: string;
 }
 
-const { brand, model, year, category, price, groupset, weight, image, slug } = Astro.props;
+const { brand, model, year, category, price, groupset, weight, image, slug, aspect = "16/10" } = Astro.props;
 const catLabel = BIKE_CATEGORIES[category];
 const formattedPrice = price >= 10000 ? `${(price / 10000).toFixed(2)} 万` : `¥${price.toLocaleString()}`;
 ---
 
 <a href={`/bikes/${slug}`} class="card overflow-hidden group">
-  <div class="aspect-[16/10] overflow-hidden bg-bg-tertiary">
+  <div class="overflow-hidden bg-bg-tertiary" style={`aspect-ratio: ${aspect};`}>
     <img src={image} alt={`${brand} ${model}`} class="w-full h-full object-cover motion-image group-hover:scale-[1.03]" loading="lazy" />
   </div>
   <div class="p-5">

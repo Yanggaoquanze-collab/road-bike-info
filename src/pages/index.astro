@@ -60,18 +60,22 @@ const hasEditorialPicks = editorialItems.length > 0;
   <Header />
   <main>
     <!-- 1. Hero -->
-    <section class="relative overflow-hidden min-h-[80vh] flex items-center justify-center">
+    <section class="relative overflow-hidden min-h-[85vh] flex items-center justify-center">
       <div class="absolute inset-0" aria-hidden="true">
         <img
           src="/images/hero-photo.jpg"
           alt=""
           class="absolute inset-0 w-full h-full object-cover mix-blend-multiply"
-          style="opacity: 0.15; filter: blur(1px);"
+          style="opacity: 0.32;"
           loading="eager"
         />
       </div>
-      <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 50% 10%, rgba(200,60,40,0.06), transparent 55%);"></div>
-      <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(to bottom, transparent 70%, rgba(250,250,248,0.5) 100%);"></div>
+      <!-- dark vignette — cinematic depth -->
+      <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.16) 100%);"></div>
+      <!-- top-down tonal gradient -->
+      <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.04));"></div>
+      <!-- fade to page bg at bottom -->
+      <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(to bottom, transparent 70%, rgba(250,250,248,0.6) 100%);"></div>
       <HeroBike />
     </section>
 
@@ -79,22 +83,22 @@ const hasEditorialPicks = editorialItems.length > 0;
     {hasEditorialPicks && <EditorialPicks items={editorialItems} />}
 
     <!-- 3. Latest News -->
-    <section class="mx-auto max-w-[1200px] px-6 py-20">
+    <section class="mx-auto max-w-[1200px] px-6 pt-12 pb-20">
       <LatestNews items={sortedNews} />
     </section>
 
-    <!-- 4. Upcoming Events -->
-    <section class="bg-bg-secondary/50 py-20">
-      <div class="mx-auto max-w-[1200px] px-6">
+    <!-- 4. Upcoming Events — compact scan zone -->
+    <section class="bg-bg-tertiary/40 border-y border-surface-border">
+      <div class="mx-auto max-w-[1200px] px-6 py-14">
         <UpcomingEvents items={sortedEvents} />
       </div>
     </section>
 
-    <!-- 5. Symptom Search -->
-    <section class="mx-auto max-w-[1200px] px-6 py-20">
+    <!-- 5. Symptom Search — quiet utility -->
+    <section class="mx-auto max-w-[1200px] px-6 py-16">
       <div class="mb-8 text-center">
-        <h2 class="text-2xl font-bold text-text-primary mb-3">快速排查</h2>
-        <p class="text-text-tertiary">描述你的症状，找到解决方案</p>
+        <h2 class="text-xl font-bold text-text-primary mb-2">快速排查</h2>
+        <p class="text-sm text-text-tertiary">描述你的症状，找到解决方案</p>
       </div>
       <SymptomSearchInline client:load />
     </section>
@@ -102,8 +106,8 @@ const hasEditorialPicks = editorialItems.length > 0;
     <!-- 6. Brand Banner (dark rhythm break) -->
     <BrandBanner />
 
-    <!-- 7. Popular Models -->
-    <section class="bg-bg-secondary/50 py-20">
+    <!-- 7. Popular Models — gallery finish -->
+    <section class="bg-bg-secondary/40 py-20">
       <div class="mx-auto max-w-[1200px] px-6">
         <PopularModels items={featuredBikes} />
       </div>
