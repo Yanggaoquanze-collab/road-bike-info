@@ -26,7 +26,7 @@ const statusColor = status === "upcoming" ? "green" : status === "ongoing" ? "am
 ---
 
 <a href={`/events/${slug}`} class="card p-5 group block">
-  <div class="flex items-center gap-2 mb-3">
+  <div class="flex items-center gap-2 mb-3 font-data">
     <span class={`inline-block w-2 h-2 rounded-full flex-shrink-0 ${status === "upcoming" ? "bg-accent-green" : status === "ongoing" ? "bg-accent-amber" : "bg-text-tertiary"}`}></span>
     <span class="text-[11px] font-medium uppercase tracking-wider text-text-tertiary">{statusLabel}</span>
     <span class="text-text-tertiary/50">·</span>
@@ -38,7 +38,7 @@ const statusColor = status === "upcoming" ? "green" : status === "ongoing" ? "am
     <Badge label={levelInfo.label} color={levelInfo.color} variant="outline" />
     <TagPill label={region === "domestic" ? "国内" : "国际"} size="sm" color={region === "domestic" ? "green" : "blue"} />
   </div>
-  <div class="flex items-center gap-2 pt-3 border-t border-surface-border text-xs text-text-tertiary">
+  <div class="flex items-center gap-2 pt-3 border-t border-surface-border font-data text-xs text-text-tertiary">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="flex-shrink-0"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
     <span>{startDate.toISOString().slice(0, 10)}{startDate.getTime() !== endDate.getTime() ? ` — ${endDate.toISOString().slice(0, 10)}` : ""}</span>
     <span>·</span>

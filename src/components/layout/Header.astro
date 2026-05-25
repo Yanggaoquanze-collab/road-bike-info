@@ -18,19 +18,22 @@ import SearchBox from "../shared/SearchBox.svelte";
           </linearGradient>
         </defs>
       </svg>
-      <span class="text-lg font-semibold text-text-primary tracking-tight">骑迹</span>
+      <span class="font-brand font-semibold text-lg text-text-primary tracking-tight">骑迹</span>
     </a>
 
     <!-- Desktop nav -->
     <div class="hidden md:flex items-center gap-8">
-      {NAV.map(item => (
-        <a
-          href={item.href}
-          class={`text-sm text-text-secondary hover:text-text-primary transition-colors ${Astro.url.pathname === item.href || (item.href !== '/' && Astro.url.pathname.startsWith(item.href)) ? '!text-accent-blue' : ''}`}
-        >
-          {item.label}
-        </a>
-      ))}
+      {NAV.map(item => {
+        const isActive = Astro.url.pathname === item.href || (item.href !== '/' && Astro.url.pathname.startsWith(item.href));
+        return (
+          <a
+            href={item.href}
+            class={`font-data text-[13px] tracking-[0.02em] font-medium transition-colors ${isActive ? 'text-accent-blue' : 'text-text-secondary hover:text-text-primary'}`}
+          >
+            {item.label}
+          </a>
+        );
+      })}
     </div>
 
     <!-- Search -->

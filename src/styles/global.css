@@ -52,7 +52,11 @@
   --color-bg-success: #4a9e6b;
   --color-bg-error: #d6403a;
 
+  /* font hierarchy */
   --font-sans: "Inter", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", system-ui, -apple-system, sans-serif;
+  --font-brand: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+  --font-display: "Inter Tight", "Inter", sans-serif;
+  --font-data: "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "Cascadia Code", "Fira Code", "JetBrains Mono", monospace;
 }
 
@@ -266,6 +270,11 @@
     line-height: 1.5;
     color: var(--color-text-tertiary);
   }
+
+  /* font family utilities */
+  .font-brand { font-family: var(--font-brand); }
+  .font-display { font-family: var(--font-display); }
+  .font-data { font-family: var(--font-data); }
 }
 
 @layer utilities {
