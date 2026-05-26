@@ -9,7 +9,4 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   site: 'https://roadbike.vercel.app',
-  build: {
-    assets: 'assets',
-  },
 });
