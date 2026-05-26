@@ -1,5 +1,4 @@
 ---
-import TagPill from "../shared/TagPill.astro";
 import { DIFFICULTY } from "../../lib/constants";
 
 interface Props {
@@ -13,18 +12,19 @@ interface Props {
 
 const { title, category, difficulty, symptoms, tags, slug } = Astro.props;
 const diff = DIFFICULTY[difficulty];
-const diffColor = { green: "bg-accent-green", amber: "bg-accent-amber", red: "bg-accent-red" }[diff.color];
+const keywords = [...new Set([...symptoms.slice(0, 3), ...tags.slice(0, 2)])].slice(0, 5).join(" · ");
 const searchText = [title, category, ...symptoms, ...tags].join(" ");
 ---
 
-<a href={`/maintenance/${slug}`} class="card p-5 group maintenance-card" data-search-text={searchText}>
-  <div class="flex items-center gap-2 mb-2">
-    <span class={`inline-block w-2 h-2 rounded-full ${diffColor}`} />
-    <span class="text-xs text-text-tertiary">{diff.label}</span>
-    <TagPill label={category} size="sm" color="blue" />
-  </div>
-  <h3 class="font-semibold text-text-primary group-hover:text-accent-blue transition-colors mb-3">{title}</h3>
-  <div class="flex flex-wrap gap-1.5">
-    {tags.slice(0, 4).map(t => <TagPill label={t} size="sm" />)}
-  </div>
+<a
+  href={`/maintenance/${slug}`}
+  class="block py-5 border-t border-surface-border maintenance-card"
+  data-search-text={searchText}
+>
+  <span class="text-meta">
+    <span class="inline-block w-1.5 h-1.5 rounded-full bg-text-tertiary align-middle mr-1.5"></span>
+    {diff.label}
+  </span>
+  <h3 class="text-base font-medium text-text-primary mt-1.5 mb-1">{title}</h3>
+  <p class="text-meta">{keywords}</p>
 </a>

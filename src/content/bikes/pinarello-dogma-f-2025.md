@@ -15,7 +15,7 @@ wheels: "Princeton Carbonworks 4550"
 tires: "Pirelli P Zero Race TLR 700x28c"
 weight: 6.8
 sizes: ["44", "46.5", "50", "51.5", "53", "54.5", "56", "57.5", "59.5"]
-image: "/images/bikes/pinarello-dogma-f-2025.jpg"
+image: "/images/editorial/bikes/pinarello-dogma-f-profile.jpg"
 imageAttribution: "Pinarello"
 officialUrl: "https://pinarello.com/"
 tags: ["Pinarello", "Dogma", "顶级", "意大利", "光环"]

@@ -87,7 +87,7 @@
 
 {#if open}
   <!-- svelte-ignore a11y_no_noninteractive_element_interaction -->
-  <div class="fixed inset-0 z-50" onclick={close} onkeydown={onKeydown}>
+  <div class="fixed inset-0 z-[60]" onclick={close} onkeydown={onKeydown}>
     <div class="absolute inset-0 bg-bg-primary/90 backdrop-blur-sm" />
     <div class="relative flex flex-col items-center pt-[15vh] px-6">
       <div class="w-full max-w-xl">
@@ -123,7 +123,7 @@
                   <a
                     href={result.url}
                     onclick={close}
-                    class="block px-4 py-3 card-sm"
+                    class="block px-4 py-3 surface-lined"
                   >
                     <p class="text-sm font-medium text-text-primary">{result.title}</p>
                     {#if result.excerpt}

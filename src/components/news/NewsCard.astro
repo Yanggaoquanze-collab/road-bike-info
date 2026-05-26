@@ -1,6 +1,4 @@
 ---
-import TagPill from "../shared/TagPill.astro";
-
 interface Props {
   title: string;
   date: Date;
@@ -12,18 +10,19 @@ interface Props {
   slug: string;
 }
 
-const { title, date, author, source, tags, summary, image, slug } = Astro.props;
+const { title, date, source, summary, image, slug } = Astro.props;
 ---
 
-<a href={`/news/${slug}`} class="card p-5 flex gap-4 group">
-  {image && <img src={image} alt={title} class="w-24 h-16 rounded-lg object-cover flex-shrink-0" loading="lazy" />}
-  <div class="min-w-0">
-    <h3 class="font-semibold text-text-primary group-hover:text-accent-blue transition-colors line-clamp-2 mb-1 leading-[1.5]" style="font-size: 16px; line-height: 1.7;">{title}</h3>
-    <p class="text-sm text-text-tertiary line-clamp-2 mb-2">{summary}</p>
-    <div class="flex items-center gap-2 flex-wrap font-data text-xs text-text-tertiary">
-      <span>{date.toISOString().slice(0, 10)}</span>
-      {source && <span>· {source}</span>}
-      {tags.slice(0, 2).map(t => <TagPill label={t} size="sm" />)}
+<a href={`/news/${slug}`} class="group block py-5 border-t border-surface-border">
+  {image && (
+    <div class="aspect-[16/9] overflow-hidden bg-bg-tertiary mb-3">
+      <img src={image} alt={title} class="w-full h-full object-cover motion-image group-hover:scale-[1.02]" loading="lazy" />
     </div>
+  )}
+  <div class="flex items-center gap-2 mb-1.5 text-meta">
+    <span>{date.toISOString().slice(0, 10)}</span>
+    {source && <><span class="text-text-tertiary/40">·</span><span class="text-accent-blue font-medium">{source}</span></>}
   </div>
+  <h3 class="font-brand font-semibold text-text-primary group-hover:text-accent-blue transition-colors leading-[1.35] text-lg mb-1.5">{title}</h3>
+  <p class="text-sm text-text-tertiary leading-relaxed line-clamp-2">{summary}</p>
 </a>

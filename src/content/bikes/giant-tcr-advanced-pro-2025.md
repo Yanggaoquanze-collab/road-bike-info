@@ -15,7 +15,7 @@ wheels: "Giant SLR 1 42 Carbon Disc"
 tires: "Cadex Race GC 700x25c"
 weight: 7.1
 sizes: ["XS", "S", "M", "ML", "L", "XL"]
-image: "/images/bikes/giant-tcr-advanced-pro-2025.jpg"
+image: "/images/editorial/bikes/giant-tcr-advanced-pro-profile.jpg"
 imageAttribution: "Giant Bicycles"
 officialUrl: "https://www.giant.com.cn/"
 tags: ["Giant", "TCR", "综合", "爬坡", "电子变速"]

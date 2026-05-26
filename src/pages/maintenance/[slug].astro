@@ -3,10 +3,7 @@ import { getCollection } from "astro:content";
 import Base from "../../components/layout/Base.astro";
 import Header from "../../components/layout/Header.astro";
 import Footer from "../../components/layout/Footer.astro";
-import TagPill from "../../components/shared/TagPill.astro";
-import Badge from "../../components/shared/Badge.astro";
 import { DIFFICULTY, slugify } from "../../lib/constants";
-import GiscusComments from "../../components/shared/GiscusComments.svelte";
 
 export async function getStaticPaths() {
   const items = await getCollection("maintenance");
@@ -23,24 +20,29 @@ const diff = DIFFICULTY[entry.data.difficulty];
 
 <Base title={entry.data.title} description={entry.data.symptoms?.join("、")}>
   <Header />
-  <main class="mx-auto max-w-3xl px-6 py-16 fade-in">
-    <a href="/maintenance" class="text-sm text-text-tertiary hover:text-text-secondary transition-colors mb-6 inline-block">&larr; 返回维修列表</a>
-    <article>
-      <div class="mb-8">
-        <div class="flex flex-wrap items-center gap-2 mb-3">
-          <Badge label={diff.label} color={diff.color} />
-          <TagPill label={entry.data.category} color="blue" />
+  <main class="py-16 fade-in" style="background: #efefec; min-height: calc(100vh - 180px);">
+    <div class="max-w-3xl mx-auto px-6">
+      <a href="/maintenance" class="text-meta hover:text-text-secondary transition-colors inline-block mb-10">&larr; Workshop Notes</a>
+
+      <article>
+        <div class="article-meta mb-3">
+          <span class="inline-block w-1.5 h-1.5 rounded-full bg-text-tertiary align-middle mr-1.5"></span>
+          {diff.label}
+          <span class="mx-2" style="color: rgba(0,0,0,.16);">·</span>
+          {entry.data.category}
         </div>
-        <h1 class="text-2xl font-bold text-text-primary mb-4">{entry.data.title}</h1>
-        <div class="flex flex-wrap gap-2">
-          {entry.data.symptoms.map(s => <TagPill label={s} size="sm" />)}
+
+        <h1 class="article-title mb-8">{entry.data.title}</h1>
+
+        <p class="text-meta mb-12">
+          {entry.data.symptoms.join(" · ")}
+        </p>
+
+        <div class="prose max-w-none">
+          <Content />
         </div>
-      </div>
-      <div class="prose max-w-none">
-        <Content />
-      </div>
-    </article>
-    <GiscusComments client:load />
+      </article>
+    </div>
   </main>
   <Footer />
 </Base>

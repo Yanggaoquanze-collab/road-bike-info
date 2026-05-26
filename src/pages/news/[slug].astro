@@ -3,8 +3,6 @@ import { getCollection } from "astro:content";
 import Base from "../../components/layout/Base.astro";
 import Header from "../../components/layout/Header.astro";
 import Footer from "../../components/layout/Footer.astro";
-import TagPill from "../../components/shared/TagPill.astro";
-import GiscusComments from "../../components/shared/GiscusComments.svelte";
 import { slugify } from "../../lib/constants";
 
 export async function getStaticPaths() {
@@ -13,33 +11,89 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-const entry = await getCollection("news").then(items => items.find(i => slugify(i.id) === slug));
+const allNews = await getCollection("news", ({ data }) => !data.draft);
+const entry = allNews.find(i => slugify(i.id) === slug);
 if (!entry) return Astro.redirect("/news");
 
 const { Content } = await entry.render();
+
+const relatedArticles = allNews
+  .filter(i => slugify(i.id) !== slug)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
 ---
 
 <Base title={entry.data.title} description={entry.data.summary} image={entry.data.image}>
   <Header />
-  <main class="mx-auto max-w-3xl px-6 py-16 fade-in">
-    <a href="/news" class="text-sm text-text-tertiary hover:text-text-secondary transition-colors mb-6 inline-block">&larr; 返回新闻列表</a>
+  <main class="fade-in">
     <article>
-      <div class="mb-8">
-        <div class="flex items-center gap-3 mb-3">
-          <TagPill label={entry.data.author === "AI" ? "AI 生成" : "人工撰写"} color={entry.data.author === "AI" ? "purple" : "green"} />
-          {entry.data.source && <TagPill label={entry.data.source} />}
-        </div>
-        <h1 class="text-3xl font-bold text-text-primary mb-3">{entry.data.title}</h1>
-        <time class="text-sm text-text-tertiary">{entry.data.date.toISOString().slice(0, 10)}</time>
-        {entry.data.sourceUrl && (
-          <a href={entry.data.sourceUrl} target="_blank" rel="noopener noreferrer" class="ml-4 text-sm text-accent-blue hover:underline">查看原文</a>
+      <!-- Contained Cinematic Hero -->
+      <div class="max-w-5xl mx-auto px-6 pt-12 pb-10">
+        {entry.data.image && (
+          <img
+            src={entry.data.image}
+            alt={entry.data.title}
+            class="w-full object-cover"
+            style="aspect-ratio: 21/9;"
+            loading="eager"
+          />
         )}
       </div>
-      <div class="prose max-w-none">
+
+      <!-- Article header: meta + title + lead -->
+      <div class="max-w-3xl mx-auto px-6">
+        <div class="article-meta mb-4">
+          {entry.data.author === "manual" ? "EDITORIAL" : "AI · GENERATED"}
+          {entry.data.source && ` · ${entry.data.source.toUpperCase()}`}
+          <br />
+          {entry.data.date.toLocaleDateString("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit" })}
+        </div>
+
+        <h1 class="article-title mb-6">{entry.data.title}</h1>
+
+        {entry.data.summary && (
+          <p class="article-lead mb-10">{entry.data.summary}</p>
+        )}
+      </div>
+
+      <!-- Article body -->
+      <div class="max-w-3xl mx-auto px-6 prose">
         <Content />
       </div>
+
+      <!-- Pull Quote (from frontmatter) -->
+      {entry.data.pullQuote && (
+        <div class="max-w-3xl mx-auto px-6">
+          <blockquote class="article-quote">{entry.data.pullQuote}</blockquote>
+        </div>
+      )}
+
+      <!-- Section Break -->
+      <div class="max-w-3xl mx-auto px-6">
+        <hr class="article-section-break" />
+      </div>
+
+      <!-- Related Articles -->
+      <div class="max-w-3xl mx-auto px-6 pb-20">
+        <p class="article-meta mb-6">继续阅读</p>
+        <div class="space-y-5">
+          {relatedArticles.map(item => (
+            <a
+              href={`/news/${slugify(item.id)}`}
+              class="group block border-t border-surface-border pt-5"
+            >
+              <div class="article-meta mb-1">
+                {item.data.date.toLocaleDateString("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit" })}
+                {item.data.source && ` · ${item.data.source}`}
+              </div>
+              <h3 class="font-brand font-semibold text-lg text-text-primary group-hover:text-accent-blue transition-colors leading-snug">
+                {item.data.title}
+              </h3>
+            </a>
+          ))}
+        </div>
+      </div>
     </article>
-    <GiscusComments client:load />
   </main>
   <Footer />
 </Base>

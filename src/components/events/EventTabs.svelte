@@ -1,24 +1,22 @@
 <script lang="ts">
   let active = $state("upcoming");
-
-  function setTab(tab: string) {
-    active = tab;
-  }
 </script>
 
 <div>
-  <div class="flex gap-1 mb-6 bg-bg-secondary rounded-xl p-1 w-fit border border-surface-border">
+  <div class="flex gap-6 mb-12">
     <button
-      class={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${active === "upcoming" ? "bg-accent-blue text-white" : "text-text-secondary hover:text-text-primary"}`}
-      onclick={() => setTab("upcoming")}
+      class="event-tab"
+      data-active={active === "upcoming"}
+      onclick={() => active = "upcoming"}
     >
-      即将开始
+      UPCOMING
     </button>
     <button
-      class={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${active === "past" ? "bg-accent-blue text-white" : "text-text-secondary hover:text-text-primary"}`}
-      onclick={() => setTab("past")}
+      class="event-tab"
+      data-active={active === "past"}
+      onclick={() => active = "past"}
     >
-      历史赛事
+      PAST
     </button>
   </div>
 
@@ -28,3 +26,28 @@
     <slot name="past" />
   {/if}
 </div>
+
+<style>
+  .event-tab {
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    opacity: 0.35;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0 0 4px 0;
+    border-bottom: 1px solid transparent;
+    transition: opacity 0.18s ease, border-bottom-color 0.18s ease;
+    font-family: var(--font-data);
+    color: #111;
+  }
+  .event-tab:hover {
+    opacity: 0.6;
+  }
+  .event-tab[data-active="true"] {
+    opacity: 1;
+    border-bottom-color: rgba(0, 0, 0, 0.2);
+  }
+</style>

@@ -11,29 +11,16 @@ const { items } = Astro.props;
 ---
 
 <div>
-  <div class="flex items-center justify-between mb-6">
-    <div>
-      <h2 class="text-xl font-bold text-text-primary">热门车型</h2>
-      <p class="text-sm text-text-tertiary mt-1">精选公路车推荐</p>
-    </div>
-    <a href="/bikes" class="text-sm text-accent-blue hover:text-accent-blue transition-colors">查看全部 &rarr;</a>
+  <div class="mb-8">
+    <h2 class="section-title mb-1">精选车型</h2>
+    <p class="section-subtitle">值得关注的最新公路车</p>
+    <a href="/bikes" class="inline-block text-sm text-text-tertiary hover:text-text-secondary transition-colors mt-3">查看全部 &rarr;</a>
   </div>
 
-  <!-- asymmetric magazine grid: 3-col base, varied spans -->
-  <div class="grid gap-5 grid-cols-1 md:grid-cols-3">
-    {items.slice(0, 4).map((item, i) => {
-      const layouts = [
-        { col: "md:col-span-2", aspect: "16/9" },
-        { col: "md:col-span-1", aspect: "3/4" },
-        { col: "md:col-span-1", aspect: "3/4" },
-        { col: "md:col-span-2", aspect: "16/9" },
-      ];
-      const layout = layouts[i];
-      return (
-        <div class={layout.col}>
-          <BikeMagazineCard {...item.data} slug={slugify(item.id)} aspect={layout.aspect} />
-        </div>
-      );
-    })}
+  <!-- 2-column photo directory, uniform 4:5 ratio -->
+  <div class="grid gap-x-8 gap-y-12 grid-cols-1 md:grid-cols-2">
+    {items.slice(0, 4).map(item => (
+      <BikeMagazineCard {...item.data} slug={slugify(item.id)} />
+    ))}
   </div>
 </div>

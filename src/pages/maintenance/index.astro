@@ -5,25 +5,89 @@ import Header from "../../components/layout/Header.astro";
 import Footer from "../../components/layout/Footer.astro";
 import MaintenanceCard from "../../components/maintenance/MaintenanceCard.astro";
 import SymptomSearch from "../../components/maintenance/SymptomSearch.svelte";
-import MaintenanceSearchFilter from "../../components/maintenance/MaintenanceSearchFilter.svelte";
 import { slugify } from "../../lib/constants";
 
 const allMaintenance = await getCollection("maintenance", ({ data }) => !data.draft);
+
+const query = Astro.url.searchParams.get("q") || "";
+
+let filtered = allMaintenance;
+if (query) {
+  const kw = query.trim().toLowerCase().split(/\s+/);
+  filtered = allMaintenance.filter((item) => {
+    const text = [item.data.title, item.data.category, ...item.data.symptoms, ...item.data.tags].join(" ").toLowerCase();
+    return kw.every((k) => text.includes(k));
+  });
+}
+
+const categoryMap: Record<string, string> = {
+  "传动系统": "DRIVETRAIN",
+  "制动系统": "BRAKE SYSTEM",
+  "轮组": "WHEEL & TIRE",
+  "变速": "SHIFTING",
+  "车架": "FRAME",
+  "其他": "GENERAL",
+};
+
+const categoryGroups = Object.entries(categoryMap)
+  .map(([cn, en]) => {
+    const items = (query ? filtered : allMaintenance).filter((i) => i.data.category === cn);
+    return { label: en, items };
+  })
+  .filter((g) => g.items.length > 0);
+
+const allCategoryLabels = categoryGroups.map((g) => g.label);
 ---
 
-<Base title="维修排查" description="口语化症状描述，精准定位故障 — 传动、制动、轮组、变速问题一站排查">
+<Base title="Workshop Notes" description="骑行工坊 — 症状排查、维修指南、工坊笔记">
   <Header />
-  <main class="mx-auto max-w-[1200px] px-6 py-16 fade-in">
-    <div class="mb-10 text-center max-w-2xl mx-auto">
-      <h1 class="text-3xl font-bold text-text-primary mb-3">维修排查</h1>
-      <p class="text-text-tertiary mb-8">用你的话描述症状，我们帮你找到原因</p>
-      <SymptomSearch client:load />
-      <MaintenanceSearchFilter client:load />
-    </div>
+  <main style="background: #efefec; min-height: calc(100vh - 180px);">
+    <div class="max-w-5xl mx-auto px-6 py-16 fade-in">
+      <h1
+        class="font-brand font-semibold mb-8"
+        style="font-size: clamp(2.4rem, 4vw, 4rem); color: #1a1a1a;"
+      >
+        Workshop Notes
+      </h1>
 
-    <div class="grid gap-4 grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))]">
-      {allMaintenance.map(item => (
-        <MaintenanceCard {...item.data} slug={slugify(item.id)} />
+      <div class="mb-6">
+        <SymptomSearch client:load />
+      </div>
+
+      {
+        query && (
+          <div class="mb-10 text-meta">
+            搜索 "<span class="text-text-primary">{query}</span>"，找到 {filtered.length} 条结果
+            {filtered.length === 0 && <span class="block mt-1">没有匹配的结果，试试其他关键词</span>}
+          </div>
+        )
+      }
+
+      <!-- Visual category index -->
+      {!query && (
+        <p
+          class="mb-14 text-sm tracking-wider"
+          style="color: rgba(0,0,0,.28); letter-spacing: .04em;"
+        >
+          {allCategoryLabels.join(" · ")}
+        </p>
+      )}
+
+      <!-- Category sections -->
+      {categoryGroups.map((group) => (
+        <section class="mb-12">
+          <h2
+            class="text-xs font-medium tracking-widest mb-4"
+            style="color: rgba(0,0,0,.32); letter-spacing: .12em;"
+          >
+            {group.label}
+          </h2>
+          <div class="border-t border-surface-border">
+            {group.items.map((item) => (
+              <MaintenanceCard {...item.data} slug={slugify(item.id)} />
+            ))}
+          </div>
+        </section>
       ))}
     </div>
   </main>

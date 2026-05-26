@@ -4,9 +4,7 @@ import Base from "../../components/layout/Base.astro";
 import Header from "../../components/layout/Header.astro";
 import Footer from "../../components/layout/Footer.astro";
 import BikeSpecTable from "../../components/bikes/BikeSpecTable.astro";
-import TagPill from "../../components/shared/TagPill.astro";
 import { BIKE_CATEGORIES, PRICE_RANGES, slugify } from "../../lib/constants";
-import GiscusComments from "../../components/shared/GiscusComments.svelte";
 
 export async function getStaticPaths() {
   const bikes = await getCollection("bikes");
@@ -14,7 +12,8 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-const entry = await getCollection("bikes").then(items => items.find(i => slugify(i.id) === slug));
+const allBikes = await getCollection("bikes", ({ data }) => !data.draft);
+const entry = allBikes.find(i => slugify(i.id) === slug);
 if (!entry) return Astro.redirect("/bikes");
 
 const { Content } = await entry.render();
@@ -25,39 +24,64 @@ const formattedPrice = entry.data.price >= 10000 ? `${(entry.data.price / 10000)
 
 <Base title={entry.data.title} description={`${entry.data.brand} ${entry.data.model} — ${entry.data.groupset}, ${entry.data.weight}kg`} image={entry.data.image}>
   <Header />
-  <main class="mx-auto max-w-4xl px-6 py-16 fade-in">
-    <a href="/bikes" class="text-sm text-text-tertiary hover:text-text-secondary transition-colors mb-6 inline-block">&larr; 返回车型库</a>
+  <main class="fade-in">
     <article>
-      <div class="card-static overflow-hidden mb-8">
-        <img src={entry.data.image} alt={entry.data.title} class="w-full h-80 object-cover" loading="eager" />
-        {entry.data.imageAttribution && (
-          <p class="px-4 py-2 text-xs text-text-tertiary text-right">图片来源：{entry.data.imageAttribution}</p>
+      <!-- Contained product hero — 4:5 product ratio -->
+      <div class="max-w-4xl mx-auto px-6 pt-12 pb-8">
+        <img
+          src={entry.data.image}
+          alt={entry.data.title}
+          class="w-full h-auto object-cover"
+          loading="eager"
+        />
+      </div>
+
+      <!-- Brand meta + model name (serif only here) + price -->
+      <div class="max-w-3xl mx-auto px-6">
+        <div class="flex items-center gap-3 article-meta mb-3">
+          <span>{entry.data.brand}</span>
+          <span class="opacity-25">·</span>
+          <span>{catLabel}</span>
+          <span class="opacity-25">·</span>
+          <span>{priceLabel}</span>
+        </div>
+
+        <h1 class="font-brand font-semibold text-text-primary mb-2"
+          style="font-size: clamp(1.75rem, 3vw, 2.25rem); letter-spacing: -0.02em; line-height: 1.15; color: #1a1a1a;">
+          {entry.data.model}
+        </h1>
+
+        <p class="text-2xl font-light text-text-secondary mb-10">{formattedPrice}</p>
+
+        {entry.data.summary && (
+          <p class="text-body mb-12">{entry.data.summary}</p>
         )}
       </div>
 
-      <div class="mb-8">
-        <div class="flex flex-wrap items-center gap-2 mb-3">
-          <TagPill label={entry.data.brand} color="blue" />
-          <TagPill label={catLabel} color="purple" />
-          <TagPill label={priceLabel} color="amber" />
-        </div>
-        <h1 class="text-3xl font-bold text-text-primary mb-1">{entry.data.title}</h1>
-        <p class="text-2xl font-semibold text-accent-blue mt-2">{formattedPrice}</p>
+      <!-- Spec table — fine-line rows -->
+      <div class="max-w-3xl mx-auto px-6 mb-12">
+        <BikeSpecTable bike={entry.data} />
       </div>
 
-      <BikeSpecTable bike={entry.data} />
-
-      {entry.data.officialUrl && (
-        <a href={entry.data.officialUrl} target="_blank" rel="noopener noreferrer" class="inline-block mt-6 px-5 py-2.5 bg-bg-secondary border border-surface-border rounded-xl text-text-secondary hover:text-text-primary hover:border-text-tertiary transition-colors">
-          查看官网 &rarr;
-        </a>
-      )}
-
-      <div class="mt-10 prose max-w-none">
+      <!-- Body — minimal prose -->
+      <div class="max-w-3xl mx-auto px-6 prose">
         <Content />
       </div>
+
+      <!-- Official link -->
+      {entry.data.officialUrl && (
+        <div class="max-w-3xl mx-auto px-6 mt-8 pb-20">
+          <a
+            href={entry.data.officialUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-sm text-text-tertiary hover:text-text-secondary transition-colors"
+          >
+            查看官网 &rarr;
+          </a>
+        </div>
+      )}
     </article>
-    <GiscusComments client:load />
   </main>
   <Footer />
 </Base>

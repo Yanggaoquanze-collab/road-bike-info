@@ -14,9 +14,8 @@ export const GISCUS = {
 };
 
 export const NAV = [
-  { label: "首页", href: "/" },
-  { label: "新闻", href: "/news" },
-  { label: "赛事", href: "/events" },
-  { label: "维修", href: "/maintenance" },
-  { label: "车型", href: "/bikes" },
+  { labelEn: "STORIES", labelZh: "新闻", href: "/news" },
+  { labelEn: "RACES", labelZh: "赛事", href: "/events" },
+  { labelEn: "MACHINES", labelZh: "车型", href: "/bikes" },
+  { labelEn: "WORKSHOP", labelZh: "维修", href: "/maintenance" },
 ];

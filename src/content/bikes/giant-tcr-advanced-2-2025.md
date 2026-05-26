@@ -15,7 +15,7 @@ wheels: "Giant P-R2 Disc"
 tires: "Giant Course 1 700x25c"
 weight: 8.3
 sizes: ["XS", "S", "M", "ML", "L", "XL"]
-image: "/images/bikes/giant-tcr-advanced-2-2025.jpg"
+image: "/images/editorial/bikes/giant-tcr-advanced-2-profile.jpg"
 imageAttribution: "Giant Bicycles"
 officialUrl: "https://www.giant.com.cn/"
 tags: ["Giant", "TCR", "入门", "105", "碳架"]

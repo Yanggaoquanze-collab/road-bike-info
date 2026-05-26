@@ -3,33 +3,218 @@ import { getCollection } from "astro:content";
 import Base from "../../components/layout/Base.astro";
 import Header from "../../components/layout/Header.astro";
 import Footer from "../../components/layout/Footer.astro";
-import EventCard from "../../components/events/EventCard.astro";
 import EventTabs from "../../components/events/EventTabs.svelte";
 import { EVENT_LEVELS, EVENT_TYPES, slugify } from "../../lib/constants";
 
 const allEvents = await getCollection("events", ({ data }) => !data.draft);
 const upcoming = allEvents.filter(e => e.data.status === "upcoming").sort((a, b) => a.data.startDate.getTime() - b.data.startDate.getTime());
 const past = allEvents.filter(e => e.data.status === "completed").sort((a, b) => b.data.endDate.getTime() - a.data.endDate.getTime());
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString("zh-CN", { month: "2-digit", day: "2-digit" });
+}
+
+function formatFullDate(date: Date) {
+  return date.toLocaleDateString("zh-CN", { month: "2-digit", day: "2-digit", year: "numeric" });
+}
+
+function groupByMonth(events: typeof upcoming) {
+  const grouped = new Map<string, typeof upcoming>();
+  for (const e of events) {
+    const d = e.data.startDate;
+    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+    if (!grouped.has(key)) grouped.set(key, []);
+    grouped.get(key)!.push(e);
+  }
+  return [...grouped.entries()];
+}
+
+function monthLabel(key: string) {
+  const [y, m] = key.split("-");
+  const months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+  return `${months[parseInt(m) - 1]} ${y}`;
+}
+
+function groupByYear(events: typeof past) {
+  const grouped = new Map<string, typeof past>();
+  for (const e of events) {
+    const key = `${e.data.endDate.getFullYear()}`;
+    if (!grouped.has(key)) grouped.set(key, []);
+    grouped.get(key)!.push(e);
+  }
+  return [...grouped.entries()];
+}
+
+const upcomingGroups = groupByMonth(upcoming);
+const pastGroups = groupByYear(past);
+
+// Tour de France as featured race
+const featured = upcoming.find(e => e.id === "2026-tour-de-france");
+const restUpcoming = upcoming.filter(e => e.id !== "2026-tour-de-france");
+
+// Re-group restUpcoming by month
+const restByMonth = groupByMonth(restUpcoming);
+const featuredMonth = featured ? `${featured.data.startDate.getFullYear()}-${String(featured.data.startDate.getMonth() + 1).padStart(2, "0")}` : "";
+
+function isGrandTour(level: string) {
+  return level === "WorldTour-International";
+}
 ---
 
 <Base title="赛事中心" description="国内外公路车赛事一览 — 世巡赛、洲际赛、业余赛，赛程信息与报名入口">
   <Header />
-  <main class="mx-auto max-w-[1200px] px-6 py-16 fade-in">
-    <div class="mb-10">
-      <h1 class="text-3xl font-bold text-text-primary mb-2">赛事中心</h1>
-      <p class="text-text-tertiary">国内外公路车赛事一览</p>
-    </div>
+  <main class="mx-auto px-6 py-16 fade-in" style="max-width: 1100px;">
+    <h1 class="section-title mb-1">赛事中心</h1>
+    <p class="section-subtitle mb-2">国内外公路车赛事日历</p>
 
     <EventTabs client:load>
-      <div slot="upcoming" class="grid gap-4 grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))]">
-        {upcoming.map(item => <EventCard {...item.data} slug={slugify(item.id)} />)}
-        {upcoming.length === 0 && <p class="text-text-tertiary col-span-full text-center py-12">暂无即将开始的赛事</p>}
+      <!-- ========== UPCOMING ========== -->
+      <div slot="upcoming">
+        {upcoming.length === 0 && <p class="text-meta text-center py-20">暂无即将开始的赛事</p>}
+
+        <!-- Featured Race: Tour de France -->
+        {featured && (
+          <div class="mb-24">
+            <a href={`/events/${slugify(featured.id)}`} class="group block">
+              <div class="overflow-hidden bg-bg-tertiary mb-6 rounded-none" style="aspect-ratio: 21/9; max-height: 480px;">
+                {featured.data.image ? (
+                  <img
+                    src={featured.data.image}
+                    alt={featured.data.title}
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.015] editorial-img"
+                    loading="eager"
+                  />
+                ) : (
+                  <div class="w-full h-full bg-bg-tertiary" />
+                )}
+              </div>
+              <div>
+                <p class="news-meta mb-2">
+                  {featured.data.titleEn || featured.data.title}
+                </p>
+                <div class="article-meta mb-4">
+                  {featured.data.startDate.toLocaleDateString("zh-CN", { month: "2-digit", day: "2-digit" })}
+                  {" — "}
+                  {featured.data.endDate.toLocaleDateString("zh-CN", { month: "2-digit", day: "2-digit" })}
+                </div>
+                <p class="text-lg mb-1" style="color: rgba(0,0,0,.52);">
+                  {featured.data.location} · {EVENT_TYPES[featured.data.type]} · {EVENT_LEVELS[featured.data.level].label}
+                </p>
+                <span class="text-sm" style="color: rgba(0,0,0,.34);">View Race &rarr;</span>
+              </div>
+            </a>
+          </div>
+        )}
+
+        <!-- Timeline -->
+        {restByMonth.map(([monthKey, items]) => (
+          <div class="mb-10">
+            <div class="timeline-row">
+              <div class="timeline-label">
+                <span class="news-meta">{monthLabel(monthKey)}</span>
+              </div>
+              <div class="timeline-items">
+                {items.map(item => {
+                  const level = EVENT_LEVELS[item.data.level];
+                  const typeLabel = EVENT_TYPES[item.data.type];
+                  const dateRange = item.data.startDate.getTime() === item.data.endDate.getTime()
+                    ? formatDate(item.data.startDate)
+                    : `${formatDate(item.data.startDate)} — ${formatDate(item.data.endDate)}`;
+                  const grand = isGrandTour(item.data.level);
+
+                  return (
+                    <a
+                      href={`/events/${slugify(item.id)}`}
+                      class={`block group ${grand ? "py-16" : "py-14"}`}
+                    >
+                      <div class="article-meta mb-2">{dateRange}</div>
+                      <h3
+                        class="font-display font-semibold text-text-primary leading-tight mb-1"
+                        style={`font-size: ${grand ? "clamp(1.5rem, 2vw, 2rem)" : "clamp(1.2rem, 1.5vw, 1.5rem)"}; letter-spacing: -0.02em;`}
+                      >
+                        {item.data.titleEn || item.data.title}
+                      </h3>
+                      <p class="text-sm" style="font-size: 0.95rem; color: rgba(0,0,0,.52);">
+                        {item.data.location}，{item.data.country} · {typeLabel} · {level.label}
+                      </p>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        ))}
+
       </div>
-      <div slot="past" class="grid gap-4 grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))]">
-        {past.map(item => <EventCard {...item.data} slug={slugify(item.id)} />)}
-        {past.length === 0 && <p class="text-text-tertiary col-span-full text-center py-12">暂无历史赛事</p>}
+
+      <!-- ========== PAST ========== -->
+      <div slot="past">
+        {past.length === 0 && <p class="text-meta text-center py-20">暂无历史赛事</p>}
+
+        {pastGroups.map(([yearLabel, items]) => (
+          <div class="mb-10">
+            <div class="timeline-row">
+              <div class="timeline-label">
+                <span class="news-meta">{yearLabel}</span>
+              </div>
+              <div class="timeline-items">
+                {items.map(item => {
+                  const level = EVENT_LEVELS[item.data.level];
+                  const typeLabel = EVENT_TYPES[item.data.type];
+                  const dateRange = formatFullDate(item.data.startDate);
+
+                  return (
+                    <a
+                      href={`/events/${slugify(item.id)}`}
+                      class="block group py-14"
+                    >
+                      <div class="article-meta mb-2">{dateRange}</div>
+                      <h3
+                        class="font-display font-semibold text-text-primary leading-tight mb-1"
+                        style="font-size: clamp(1.2rem, 1.5vw, 1.5rem); letter-spacing: -0.02em;"
+                      >
+                        {item.data.titleEn || item.data.title}
+                      </h3>
+                      <p class="text-sm" style="font-size: 0.95rem; color: rgba(0,0,0,.52);">
+                        {item.data.location}，{item.data.country} · {typeLabel} · {level.label}
+                      </p>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </EventTabs>
   </main>
   <Footer />
 </Base>
+
+<style>
+  .timeline-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 2rem;
+  }
+
+  .timeline-label {
+    padding-top: 0;
+  }
+
+  .timeline-items {
+    border-left: 1px solid rgba(0, 0, 0, 0.08);
+    padding-left: 2rem;
+  }
+
+  @media (max-width: 640px) {
+    .timeline-row {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+    .timeline-items {
+      border-left: none;
+      padding-left: 0;
+    }
+  }
+</style>

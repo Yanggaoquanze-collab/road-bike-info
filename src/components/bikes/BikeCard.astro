@@ -21,19 +21,17 @@ const formattedPrice = price >= 10000 ? `${(price / 10000).toFixed(2)} 万` : `�
 const priceRange = price < 20000 ? "entry" : price <= 50000 ? "mid" : "high";
 ---
 
-<a href={`/bikes/${slug}`} class="card overflow-hidden group" data-bike-card data-brand={brand} data-category={category} data-price-range={priceRange}>
-  <div class="aspect-[4/3] overflow-hidden bg-bg-tertiary">
-    <img src={image} alt={`${brand} ${model}`} class="w-full h-full object-cover motion-image group-hover:scale-[1.02]" loading="lazy" />
+<a href={`/bikes/${slug}`} class="group block" data-bike-card data-brand={brand} data-category={category} data-price-range={priceRange}>
+  <div class="aspect-[4/5] overflow-hidden bg-bg-tertiary mb-3">
+    <img src={image} alt={`${brand} ${model}`} class="w-full h-full object-cover motion-image group-hover:scale-[1.03]" loading="lazy" />
   </div>
-  <div class="p-5">
-    <div class="flex items-center gap-2 mb-1 font-data text-xs text-text-tertiary">
-      <span>{brand}</span>
-      <TagPill label={catLabel} size="sm" color="purple" />
-    </div>
-    <h3 class="font-data font-semibold text-text-primary group-hover:text-accent-blue transition-colors mb-2">{model} {year}</h3>
-    <div class="flex items-center justify-between font-data text-sm">
-      <span class="text-accent-blue font-semibold">{formattedPrice}</span>
-      <span class="text-[13px] tracking-[0.01em] text-text-secondary/55">{groupset} · {weight}kg</span>
-    </div>
+  <div class="flex items-center gap-2 mb-0.5 text-meta">
+    <span>{brand}</span>
+    <TagPill label={catLabel} size="sm" color="purple" />
+  </div>
+  <h3 class="font-display font-semibold text-text-primary group-hover:text-accent-blue transition-colors leading-snug">{model} {year}</h3>
+  <div class="flex items-center justify-between text-meta mt-1">
+    <span class="text-accent-blue font-medium">{formattedPrice}</span>
+    <span>{groupset} · {weight}kg</span>
   </div>
 </a>

@@ -15,7 +15,7 @@ wheels: "HollowGram R-SL 50"
 tires: "Vittoria Corsa N.EXT 700x28c"
 weight: 6.9
 sizes: ["48", "51", "54", "56", "58"]
-image: "/images/bikes/cannondale-supersix-evo-2025.jpg"
+image: "/images/editorial/bikes/cannondale-supersix-evo-profile.jpg"
 imageAttribution: "Cannondale Bicycles"
 officialUrl: "https://www.cannondale.com/"
 tags: ["Cannondale", "SuperSix", "综合", "美国"]

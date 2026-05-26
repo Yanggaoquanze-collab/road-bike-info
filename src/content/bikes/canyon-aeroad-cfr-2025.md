@@ -15,7 +15,7 @@ wheels: "DT Swiss ARC 1100 Dicut 50"
 tires: "Continental GP5000 S TR 700x25c"
 weight: 7.0
 sizes: ["XS", "S", "M", "L", "XL"]
-image: "/images/bikes/canyon-aeroad-cfr-2025.jpg"
+image: "/images/editorial/bikes/canyon-aeroad-cfr-profile.jpg"
 imageAttribution: "Canyon Bicycles"
 officialUrl: "https://www.canyon.com/"
 tags: ["Canyon", "Aeroad", "气动", "顶级", "直销"]

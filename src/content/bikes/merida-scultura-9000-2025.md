@@ -15,7 +15,7 @@ wheels: "Reynolds Aero 46 DB"
 tires: "Continental GP5000 700x25c"
 weight: 6.5
 sizes: ["XS", "S", "M", "L", "XL"]
-image: "/images/bikes/merida-scultura-9000-2025.jpg"
+image: "/images/editorial/bikes/merida-scultura-9000-profile.jpg"
 imageAttribution: "Merida Bikes"
 officialUrl: "https://www.merida.com.tw/"
 tags: ["Merida", "Scultura", "爬坡", "顶级", "台湾"]

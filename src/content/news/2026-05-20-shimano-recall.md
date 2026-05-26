@@ -1,11 +1,13 @@
 ---
 title: "Shimano 召回部分 Ultegra R8170 曲柄组，涉及约15万套"
+image: "/images/editorial/product/2026-shimano-ultegra-recall.jpg"
 date: 2026-05-20
 author: "manual"
 source: "Shimano 官方公告"
 sourceUrl: "https://bike.shimano.com"
 tags: ["Shimano", "Ultegra", "召回", "曲柄"]
 summary: "Shimano 宣布在全球范围内召回2023年6月至2024年12月期间生产的 Ultegra R8170 系列曲柄组，涉及约15万套产品。召回原因为曲柄臂可能存在分层缺陷，极端情况下可能导致断裂。"
+pullQuote: "本次召回仅涉及曲柄组，不影响变速器、手变、刹车等其他 Ultegra R8170 系列组件。"
 draft: false
 ---
 

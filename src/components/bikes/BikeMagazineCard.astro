@@ -11,25 +11,27 @@ interface Props {
   weight: number;
   image: string;
   slug: string;
-  aspect?: string;
 }
 
-const { brand, model, year, category, price, groupset, weight, image, slug, aspect = "16/10" } = Astro.props;
+const { brand, model, year, category, price, groupset, weight, image, slug } = Astro.props;
 const catLabel = BIKE_CATEGORIES[category];
 const formattedPrice = price >= 10000 ? `${(price / 10000).toFixed(2)} 万` : `¥${price.toLocaleString()}`;
 ---
 
-<a href={`/bikes/${slug}`} class="card overflow-hidden group">
-  <div class="overflow-hidden bg-bg-tertiary" style={`aspect-ratio: ${aspect};`}>
+<a href={`/bikes/${slug}`} class="group block">
+  <!-- uniform 4:5 image, no border, no radius -->
+  <div class="aspect-[3/2] overflow-hidden bg-bg-tertiary mb-4">
     <img src={image} alt={`${brand} ${model}`} class="w-full h-full object-cover motion-image group-hover:scale-[1.03]" loading="lazy" />
   </div>
-  <div class="p-5">
-    <div class="flex items-center gap-2 mb-1.5 font-data text-xs text-text-tertiary">
-      <span>{brand}</span>
-      <span class="text-text-tertiary/50">·</span>
-      <span>{catLabel}</span>
-    </div>
-    <h3 class="font-data font-semibold text-lg text-text-primary group-hover:text-accent-blue transition-colors mb-1.5">{model} ({year})</h3>
-    <p class="font-data text-[13px] tracking-[0.01em] text-text-secondary/55">{groupset} · {formattedPrice} · {weight}kg</p>
+
+  <!-- minimal text: brand + model only -->
+  <div class="flex items-center gap-2 text-meta mb-1">
+    <span>{brand}</span>
+    <span class="text-text-tertiary/40">·</span>
+    <span>{catLabel}</span>
   </div>
+  <h3 class="font-display font-semibold text-xl text-text-primary group-hover:text-accent-blue transition-colors leading-snug">
+    {model} ({year})
+  </h3>
+  <p class="text-meta mt-1">{groupset} · {formattedPrice} · {weight}kg</p>
 </a>

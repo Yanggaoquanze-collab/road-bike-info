@@ -9,6 +9,7 @@ startDate: 2026-07-04
 endDate: 2026-07-26
 location: "哥本哈根-巴黎"
 status: "upcoming"
+image: "/images/photos/微信图片_20260525114856_829_248.jpg"
 summary: "第113届环法自行车赛将于2026年7月4日在丹麦哥本哈根发车，这是环法历史上首次从丹麦出发。全程21个赛段，终点为巴黎香榭丽舍大街。"
 tags: ["Grand Tour", "环法", "WorldTour"]
 draft: false

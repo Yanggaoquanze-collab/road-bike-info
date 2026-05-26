@@ -4,113 +4,76 @@ import Base from "../components/layout/Base.astro";
 import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
 import HeroBike from "../components/homepage/HeroBike.astro";
-import EditorialPicks from "../components/homepage/EditorialPicks.astro";
+import ManifestoStrip from "../components/homepage/ManifestoStrip.svelte";
 import LatestNews from "../components/homepage/LatestNews.astro";
 import UpcomingEvents from "../components/homepage/UpcomingEvents.astro";
 import SymptomSearchInline from "../components/homepage/SymptomSearchInline.svelte";
 import PopularModels from "../components/homepage/PopularModels.astro";
-import BrandBanner from "../components/homepage/BrandBanner.astro";
-import { slugify } from "../lib/constants";
+import BrandBanner from "../components/homepage/BrandBanner.svelte";
 
-// --- News (for LatestNews section) ---
+// --- News ---
 const news = await getCollection("news", ({ data }) => !data.draft);
 const sortedNews = news.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, 3);
 
-// --- Events (for UpcomingEvents section) ---
+// --- Events ---
 const events = await getCollection("events", ({ data }) => !data.draft && data.status === "upcoming");
 const sortedEvents = events.sort((a, b) => a.data.startDate.getTime() - b.data.startDate.getTime()).slice(0, 3);
 
-// --- Bikes (for PopularModels section) ---
+// --- Bikes ---
 const bikes = await getCollection("bikes", ({ data }) => !data.draft);
 const featuredBikes = bikes.slice(0, 4);
-
-// --- Editorial Picks: featured content from news and events ---
-const featuredNews = await getCollection("news", ({ data }) => !data.draft && data.featured === true);
-const featuredEvents = await getCollection("events", ({ data }) => !data.draft && data.featured === true);
-
-const editorialItems = [
-  ...featuredNews.map((item) => ({
-    id: item.id,
-    collection: "news" as const,
-    title: item.data.title,
-    summary: item.data.summary,
-    image: item.data.featuredImage || item.data.image,
-    date: item.data.date,
-    tags: item.data.tags,
-    slug: slugify(item.id),
-  })),
-  ...featuredEvents.map((item) => ({
-    id: item.id,
-    collection: "events" as const,
-    title: item.data.title,
-    summary: item.data.summary,
-    image: item.data.featuredImage || undefined,
-    date: item.data.startDate,
-    tags: item.data.tags,
-    slug: slugify(item.id),
-  })),
-]
-  .sort((a, b) => b.date.getTime() - a.date.getTime())
-  .slice(0, 3);
-
-const hasEditorialPicks = editorialItems.length > 0;
 ---
 
 <Base description="在风里，找到速度的意义。公路车新闻、赛事、维修、车型库">
   <Header />
   <main>
-    <!-- 1. Hero -->
-    <section class="relative overflow-hidden min-h-[85vh] flex items-center justify-center">
+    <!-- 1. Hero — brand entry -->
+    <section class="relative overflow-hidden min-h-[85vh] flex items-center">
       <div class="absolute inset-0" aria-hidden="true">
         <img
-          src="/images/hero-photo.jpg"
+          src="/images/photos/微信图片_20260525114856_829_248.jpg"
           alt=""
-          class="absolute inset-0 w-full h-full object-cover mix-blend-multiply"
-          style="opacity: 0.32;"
+          class="absolute inset-0 w-full h-full object-cover"
           loading="eager"
         />
       </div>
-      <!-- dark vignette — cinematic depth -->
-      <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.16) 100%);"></div>
-      <!-- top-down tonal gradient -->
-      <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.04));"></div>
+      <!-- cool cinematic vignette -->
+      <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at center, transparent 30%, rgba(10,14,20,0.25) 100%);"></div>
+      <!-- cold top-down tonal overlay -->
+      <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(to bottom, rgba(15,20,28,0.18), rgba(15,20,28,0.02));"></div>
       <!-- fade to page bg at bottom -->
-      <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(to bottom, transparent 70%, rgba(250,250,248,0.6) 100%);"></div>
+      <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(to bottom, transparent 65%, rgba(245,245,243,0.7) 100%);"></div>
       <HeroBike />
     </section>
 
-    <!-- 2. Editorial Picks (conditional) -->
-    {hasEditorialPicks && <EditorialPicks items={editorialItems} />}
+    <!-- 2. Manifesto — editorial voice, pure typography -->
+    <ManifestoStrip client:load />
 
-    <!-- 3. Latest News -->
-    <section class="mx-auto max-w-[1200px] px-6 pt-12 pb-20">
+    <!-- 3. Latest News — newspaper layout -->
+    <section class="mx-auto max-w-[1200px] px-6 pt-8 pb-20">
       <LatestNews items={sortedNews} />
     </section>
 
-    <!-- 4. Upcoming Events — compact scan zone -->
-    <section class="bg-bg-tertiary/40 border-y border-surface-border">
-      <div class="mx-auto max-w-[1200px] px-6 py-14">
-        <UpcomingEvents items={sortedEvents} />
-      </div>
+    <!-- 4. Upcoming Events — compact calendar, tight rhythm -->
+    <section class="mx-auto max-w-[1200px] px-6 py-12">
+      <UpcomingEvents items={sortedEvents} />
     </section>
 
     <!-- 5. Symptom Search — quiet utility -->
-    <section class="mx-auto max-w-[1200px] px-6 py-16">
-      <div class="mb-8 text-center">
-        <h2 class="text-xl font-bold text-text-primary mb-2">快速排查</h2>
-        <p class="text-sm text-text-tertiary">描述你的症状，找到解决方案</p>
+    <section class="mx-auto max-w-[1200px] px-6 py-12">
+      <div class="mb-6">
+        <h2 class="section-title mb-1">快速排查</h2>
+        <p class="section-subtitle">描述你的症状，找到解决方案</p>
       </div>
       <SymptomSearchInline client:load />
     </section>
 
-    <!-- 6. Brand Banner (dark rhythm break) -->
-    <BrandBanner />
+    <!-- 6. Brand Banner — emotional dark break -->
+    <BrandBanner client:load />
 
-    <!-- 7. Popular Models — gallery finish -->
-    <section class="bg-bg-secondary/40 py-20">
-      <div class="mx-auto max-w-[1200px] px-6">
-        <PopularModels items={featuredBikes} />
-      </div>
+    <!-- 7. Popular Models — photo directory -->
+    <section class="mx-auto max-w-[1200px] px-6 py-20">
+      <PopularModels items={featuredBikes} />
     </section>
   </main>
   <Footer />

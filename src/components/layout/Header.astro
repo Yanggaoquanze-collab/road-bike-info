@@ -4,46 +4,124 @@ import MobileNav from "./MobileNav.svelte";
 import SearchBox from "../shared/SearchBox.svelte";
 ---
 
-<header class="sticky top-0 z-50 bg-white/72 backdrop-blur-xl" style="border-bottom: 1px solid rgba(0,0,0,0.04);">
-  <nav class="mx-auto max-w-7xl flex items-center justify-between px-6 h-16">
-    <a href="/" class="flex items-center gap-2 transition-opacity duration-200 hover:opacity-80">
-      <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="25" cy="24" r="4.5" stroke="url(#grad)" stroke-width="2"/>
-        <circle cx="7" cy="24" r="4.5" stroke="url(#grad)" stroke-width="2"/>
-        <path d="M7 24 L10 8 L16 4 L22 8 L25 24" stroke="url(#grad)" stroke-width="2" fill="none" stroke-linejoin="round"/>
-        <defs>
-          <linearGradient id="grad" x1="0" y1="0" x2="32" y2="0">
-            <stop stop-color="var(--color-accent-blue)"/>
-            <stop offset="1" stop-color="var(--color-accent-purple)"/>
-          </linearGradient>
-        </defs>
+<header
+  id="site-header"
+  class="sticky top-0 z-50"
+  style="background: rgba(243,243,241,.58); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid transparent; transition: border-color 400ms ease;"
+>
+  <nav class="mx-auto max-w-7xl flex items-center px-6" style="height: 88px; gap: 2rem;">
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-2.5 flex-shrink-0" style="opacity: 0.9; transition: opacity 0.2s ease;">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="25" cy="24" r="4.5" stroke="#111" stroke-width="1.5"/>
+        <circle cx="7" cy="24" r="4.5" stroke="#111" stroke-width="1.5"/>
+        <path d="M7 24 L10 8 L16 4 L22 8 L25 24" stroke="#111" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
       </svg>
-      <span class="font-brand font-semibold text-lg text-text-primary tracking-tight">骑迹</span>
+      <span class="font-brand font-semibold tracking-tight" style="font-size: 21px; color: #111;">骑迹</span>
     </a>
 
+    <!-- Spacer -->
+    <div class="flex-1 hidden md:block"></div>
+
     <!-- Desktop nav -->
-    <div class="hidden md:flex items-center gap-8">
+    <div class="hidden md:flex items-center" style="gap: 3rem; margin-right: 2rem;">
       {NAV.map(item => {
         const isActive = Astro.url.pathname === item.href || (item.href !== '/' && Astro.url.pathname.startsWith(item.href));
         return (
           <a
             href={item.href}
-            class={`font-data text-[13px] tracking-[0.02em] font-medium transition-colors ${isActive ? 'text-accent-blue' : 'text-text-secondary hover:text-text-primary'}`}
+            class="nav-link"
+            data-active={isActive ? "true" : "false"}
           >
-            {item.label}
+            <span class="nav-en">{item.labelEn}</span>
+            <span class="nav-line"></span>
+            <span class="nav-zh">{item.labelZh}</span>
           </a>
         );
       })}
     </div>
 
     <!-- Search -->
-    <div class="flex items-center">
+    <div class="flex items-center flex-shrink-0">
       <SearchBox client:load />
     </div>
 
     <!-- Mobile nav trigger -->
-    <div class="md:hidden">
+    <div class="md:hidden flex-shrink-0">
       <MobileNav client:load />
     </div>
   </nav>
 </header>
+
+<style>
+  .nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+    opacity: 0.55;
+    transition: opacity 0.18s ease;
+  }
+  .nav-link:hover {
+    opacity: 0.85;
+  }
+  .nav-link[data-active="true"] {
+    opacity: 1;
+  }
+
+  .nav-en {
+    font-family: var(--font-data);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: #111;
+    white-space: nowrap;
+  }
+
+  .nav-line {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -10px;
+    width: 14px;
+    height: 1px;
+    background: #111;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+  }
+  .nav-link:hover .nav-line {
+    opacity: 0.3;
+  }
+  .nav-link[data-active="true"] .nav-line {
+    opacity: 1;
+  }
+
+  .nav-zh {
+    font-family: var(--font-data);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: #111;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+    margin-top: 2px;
+    white-space: nowrap;
+  }
+  .nav-link:hover .nav-zh {
+    opacity: 0.35;
+  }
+  .nav-link[data-active="true"] .nav-zh {
+    opacity: 0.35;
+  }
+</style>
+
+<!-- Scroll-aware border -->
+<script>
+  const header = document.getElementById('site-header');
+  if (header) {
+    const update = () => {
+      header.style.borderBottomColor = window.scrollY > 4 ? 'rgba(0,0,0,.04)' : 'transparent';
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+</script>

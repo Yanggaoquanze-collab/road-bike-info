@@ -34,7 +34,7 @@
   <h3 class="text-lg font-semibold text-text-primary mb-6">评论</h3>
 
   {#if GISCUS.repo.includes("YOUR_GITHUB")}
-    <div class="px-6 py-8 card-static text-center">
+    <div class="px-6 py-8 surface-lined text-center">
       <p class="text-text-secondary text-sm mb-3">评论功能尚未配置</p>
       <p class="text-text-tertiary text-xs">
         部署前请在 <code class="px-1 py-0.5 bg-bg-primary border border-surface-border rounded text-[11px]">src/config.ts</code> 中填入你的 GitHub 仓库信息和

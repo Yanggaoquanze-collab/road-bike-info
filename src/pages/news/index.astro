@@ -3,15 +3,18 @@ import { getCollection } from "astro:content";
 import Base from "../../components/layout/Base.astro";
 import Header from "../../components/layout/Header.astro";
 import Footer from "../../components/layout/Footer.astro";
-import NewsCard from "../../components/news/NewsCard.astro";
 import { slugify } from "../../lib/constants";
 
 const allNews = await getCollection("news", ({ data }) => !data.draft);
 const sorted = allNews.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-const grouped = new Map<string, typeof sorted>();
-for (const item of sorted) {
-  const key = item.data.date.toISOString().slice(0, 10);
+const featured = sorted[0];
+const rest = sorted.slice(1);
+
+// Group rest by date
+const grouped = new Map<string, typeof rest>();
+for (const item of rest) {
+  const key = item.data.date.toLocaleDateString("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit" });
   if (!grouped.has(key)) grouped.set(key, []);
   grouped.get(key)!.push(item);
 }
@@ -19,21 +22,68 @@ for (const item of sorted) {
 
 <Base title="新闻中心" description="公路车资讯速递 — 赛报、装备、行业动态，一站式掌握骑行圈大小事">
   <Header />
-  <main class="mx-auto max-w-[1200px] px-6 py-16 fade-in">
-    <div class="mb-10">
-      <h1 class="text-3xl font-bold text-text-primary mb-2">新闻中心</h1>
-      <p class="text-text-tertiary">公路车领域最新动态</p>
-    </div>
-
-    <div class="max-w-3xl mx-auto space-y-12">
-      {[...grouped.entries()].map(([date, items]) => (
-        <section>
-          <h2 class="text-sm font-semibold text-text-tertiary mb-4 pb-2 border-b border-surface-border">
-            {date}
+  <main class="mx-auto max-w-[860px] px-6 py-16 fade-in">
+    <!-- Featured article — cover story -->
+    {featured && (
+      <div class="mb-28">
+        <a href={`/news/${slugify(featured.id)}`} class="group block">
+          {featured.data.image && (
+            <div class="overflow-hidden bg-bg-tertiary mb-8 rounded-none" style="aspect-ratio: 21/9;">
+              <img
+                src={featured.data.image}
+                alt={featured.data.title}
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.015] editorial-img"
+                loading="eager"
+              />
+            </div>
+          )}
+          <p class="news-meta mb-2">
+            {featured.data.source && `${featured.data.source} · `}
+            {featured.data.date.toLocaleDateString("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit" })}
+          </p>
+          <h2 class="news-featured-title mb-4">
+            {featured.data.title}
           </h2>
-          <div class="space-y-4">
+          <p class="news-featured-excerpt">{featured.data.summary}</p>
+        </a>
+      </div>
+    )}
+
+    <!-- Rest articles — grouped by date, editorial listing -->
+    <div class="border-t" style="border-color: rgba(0,0,0,.06); padding-top: 3.6rem;">
+      {[...grouped.entries()].map(([date, items]) => (
+        <section class="mb-8">
+          <p class="news-meta mb-6">{date}</p>
+          <div class="space-y-0">
             {items.map(item => (
-              <NewsCard {...item.data} slug={slugify(item.id)} />
+              <a
+                href={`/news/${slugify(item.id)}`}
+                class="group grid py-14 border-t"
+                style="grid-template-columns: minmax(0, 1.6fr) 240px; gap: 3rem; border-color: rgba(0,0,0,.06);"
+              >
+                <!-- Text left -->
+                <div class="min-w-0">
+                  <p class="news-meta mb-1">
+                    {item.data.source && `${item.data.source}`}
+                  </p>
+                  <h3 class="news-title mb-1.5" style="max-width: 18ch;">
+                    {item.data.title}
+                  </h3>
+                  <p class="news-excerpt line-clamp-2">{item.data.summary}</p>
+                </div>
+
+                <!-- Image right -->
+                {item.data.image && (
+                  <div class="overflow-hidden bg-bg-tertiary flex-shrink-0 rounded-none" style="aspect-ratio: 4/5;">
+                    <img
+                      src={item.data.image}
+                      alt={item.data.title}
+                      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.015] editorial-img"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+              </a>
             ))}
           </div>
         </section>

@@ -23,17 +23,28 @@
   font-display: swap;
 }
 
+/* ------------------------------------------------------------------ */
+/* Design Tokens                                                        */
+/* ------------------------------------------------------------------ */
+
+:root {
+  /* spacing rhythm — section-level breathing */
+  --space-section-tight: 5rem;
+  --space-section: 8rem;
+  --space-section-loose: 12rem;
+}
+
 @theme {
-  /* surface */
-  --color-bg-primary: #fafaf8;
+  /* surface — cool neutral palette */
+  --color-bg-primary: #f5f5f3;
   --color-bg-secondary: #ffffff;
-  --color-bg-tertiary: #f3f2ef;
-  --color-surface-border: #e5e2dc;
+  --color-bg-tertiary: #ebebe8;
+  --color-surface-border: rgba(0, 0, 0, 0.06);
 
   /* text */
-  --color-text-primary: #2d2a26;
-  --color-text-secondary: #6b6560;
-  --color-text-tertiary: #9a948f;
+  --color-text-primary: #111111;
+  --color-text-secondary: #6b6b6b;
+  --color-text-tertiary: #969696;
 
   /* brand (vermilion red) */
   --color-accent-blue: #c83c28;
@@ -52,13 +63,21 @@
   --color-bg-success: #4a9e6b;
   --color-bg-error: #d6403a;
 
-  /* font hierarchy */
-  --font-sans: "Inter", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", system-ui, -apple-system, sans-serif;
+  /* font hierarchy
+     brand  → 思源宋体 — Hero / Banner / 品牌宣言
+     display → Inter — section 标题 / 编辑标题
+     sans  → Inter + PingFang SC — 正文 / 导航 / UI
+     data  → Inter — metadata / 参数 / 日期 */
+  --font-sans: "Inter", "PingFang SC", "Hiragino Sans GB", system-ui, -apple-system, sans-serif;
   --font-brand: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
-  --font-display: "Inter Tight", "Inter", sans-serif;
+  --font-display: "Inter", "PingFang SC", system-ui, -apple-system, sans-serif;
   --font-data: "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "Cascadia Code", "Fira Code", "JetBrains Mono", monospace;
 }
+
+/* ------------------------------------------------------------------ */
+/* Base                                                                */
+/* ------------------------------------------------------------------ */
 
 @layer base {
   * {
@@ -112,19 +131,208 @@
   }
 }
 
+/* ------------------------------------------------------------------ */
+/* Typography System                                                    */
+/* ------------------------------------------------------------------ */
+
 @layer components {
-  /* prose */
-  .prose {
-    color: var(--color-text-secondary);
-    max-width: 72ch;
-  }
-  .prose h1,
-  .prose h2,
-  .prose h3,
-  .prose h4,
-  .prose h5,
-  .prose h6 {
+  /* section title — editorial-grade heading for page sections */
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 3rem);
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
     color: var(--color-text-primary);
+  }
+
+  /* section subtitle — quiet supporting line below section-title */
+  .section-subtitle {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    color: var(--color-text-tertiary);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+
+  /* editorial display — large manifesto / pull-quote text */
+  .text-display {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    color: var(--color-text-primary);
+  }
+
+  /* body reading text */
+  .text-body {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+  }
+
+  /* metadata — dates, authors, tags, specs */
+  .text-meta {
+    font-family: var(--font-data);
+    font-size: 0.8125rem;
+    color: var(--color-text-tertiary);
+    letter-spacing: 0.01em;
+  }
+
+  /* font family utility classes */
+  .font-brand { font-family: var(--font-brand); }
+  .font-display { font-family: var(--font-display); }
+  .font-data { font-family: var(--font-data); }
+
+  /* ------------------------------------------------------------------ */
+  /* Article Typography — editorial reading experience                    */
+  /* ------------------------------------------------------------------ */
+
+  .article-title {
+    font-family: var(--font-brand);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: #1a1a1a;
+  }
+
+  .article-lead {
+    font-family: var(--font-brand);
+    font-size: 1.35rem;
+    line-height: 1.8;
+    font-weight: 300;
+    color: #555;
+  }
+
+  .article-body {
+    font-family: var(--font-sans);
+    font-size: 1.15rem;
+    line-height: 1.95;
+    font-weight: 400;
+    color: #383838;
+  }
+
+  .article-meta {
+    font-family: var(--font-data);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    opacity: 0.42;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* News List Typography — editorial scanning rhythm                    */
+  /* ------------------------------------------------------------------ */
+
+  .news-featured-title {
+    font-family: var(--font-sans);
+    font-size: clamp(2rem, 2.4vw, 2.6rem);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: #161616;
+  }
+
+  .news-featured-excerpt {
+    font-size: 1.15rem;
+    line-height: 1.9;
+    color: rgba(0, 0, 0, 0.52);
+    max-width: 58ch;
+  }
+
+  .news-title {
+    font-family: var(--font-sans);
+    font-size: 1.45rem;
+    font-weight: 600;
+    line-height: 1.32;
+    letter-spacing: -0.01em;
+    color: #161616;
+  }
+
+  .news-excerpt {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: rgba(0, 0, 0, 0.52);
+    max-width: 58ch;
+  }
+
+  .news-meta {
+    font-family: var(--font-data);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.34);
+    font-weight: 500;
+  }
+
+  .article-quote {
+    font-family: var(--font-brand);
+    font-size: clamp(1.6rem, 2vw, 2.4rem);
+    line-height: 1.5;
+    letter-spacing: -0.02em;
+    color: #111;
+    padding-left: 1.5rem;
+    border-left: 1px solid rgba(0, 0, 0, 0.15);
+    margin: 5rem 0;
+  }
+
+  .article-section-break {
+    width: 100%;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.08);
+    margin: 5rem 0;
+    border: none;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Surface — minimal content container (replaces .card / .card-static)  */
+  /* No border. No shadow. No radius. Just background.                    */
+  /* ------------------------------------------------------------------ */
+
+  .surface {
+    background: var(--color-bg-secondary);
+  }
+
+  /* hairline surface — with a barely-visible line, for detail pages */
+  .surface-lined {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-surface-border);
+    border-radius: 6px;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Prose                                                               */
+  /* ------------------------------------------------------------------ */
+
+  .prose {
+    color: #383838;
+    font-size: 1.15rem;
+    line-height: 1.95;
+  }
+  .prose h2 {
+    font-family: var(--font-brand);
+    font-size: 1.8rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #1a1a1a;
+    margin-top: 5rem;
+    margin-bottom: 1.8rem;
+  }
+  .prose h3 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #1a1a1a;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .prose p {
+    margin-bottom: 1.9rem;
   }
   .prose strong {
     color: var(--color-text-primary);
@@ -148,6 +356,7 @@
     background: #1f1f1f;
     color: #f5f5f5;
     border-radius: 8px;
+    filter: saturate(0.92) contrast(0.98) brightness(0.985);
     padding: 1rem 1.25rem;
     overflow-x: auto;
   }
@@ -157,16 +366,20 @@
     padding: 0;
   }
   .prose blockquote {
-    border-left: 3px solid var(--color-surface-border);
+    border-left: 1px solid rgba(0, 0, 0, 0.15);
     color: var(--color-text-secondary);
-    padding-left: 1rem;
-    font-style: italic;
+    padding-left: 1.25rem;
+    margin: 3rem 0;
+    font-style: normal;
+    font-family: var(--font-brand);
+    font-size: 1.1rem;
   }
   .prose hr {
     border-color: var(--color-surface-border);
   }
   .prose img {
     border-radius: 8px;
+    filter: saturate(0.92) contrast(0.98) brightness(0.985);
   }
   .prose table {
     width: 100%;
@@ -183,99 +396,11 @@
     color: var(--color-text-primary);
     font-weight: 600;
   }
-
-  /* card — 主交互卡片：上浮 + 阴影增强 */
-  .card {
-    background: var(--color-bg-secondary);
-    border: 1px solid var(--color-surface-border);
-    border-radius: 12px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-    transition: all 220ms ease-out;
-  }
-  .card:hover {
-    border-color: rgba(200, 60, 40, 0.18);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-    transform: translateY(-4px);
-  }
-
-  /* card-sm — 次要交互元素：仅边框增强，不上浮 */
-  .card-sm {
-    background: var(--color-bg-secondary);
-    border: 1px solid var(--color-surface-border);
-    border-radius: 10px;
-    transition: border-color 220ms ease-out;
-  }
-  .card-sm:hover {
-    border-color: var(--color-accent-blue);
-  }
-
-  /* card-static — 卡片外观但无交互（详情页图片容器等） */
-  .card-static {
-    background: var(--color-bg-secondary);
-    border: 1px solid var(--color-surface-border);
-    border-radius: 12px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-  }
-
-  /* button system */
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0.5rem;
-    padding: 0.5rem 1rem;
-    font-weight: 500;
-    transition: all 220ms ease-out;
-    cursor: pointer;
-  }
-  .btn-primary {
-    background: var(--color-accent-blue);
-    color: white;
-  }
-  .btn-primary:hover {
-    opacity: 0.92;
-  }
-  .btn-secondary {
-    background: var(--color-bg-secondary);
-    color: var(--color-text-primary);
-    border: 1px solid var(--color-surface-border);
-  }
-  .btn-secondary:hover {
-    border-color: var(--color-accent-blue);
-    color: var(--color-accent-blue);
-  }
-
-  /* typography utilities */
-  .text-h1 {
-    font-size: 2.25rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-    color: var(--color-text-primary);
-  }
-  .text-h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    line-height: 1.3;
-    color: var(--color-text-primary);
-  }
-  .text-body {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: var(--color-text-secondary);
-  }
-  .text-caption {
-    font-size: 0.875rem;
-    line-height: 1.5;
-    color: var(--color-text-tertiary);
-  }
-
-  /* font family utilities */
-  .font-brand { font-family: var(--font-brand); }
-  .font-display { font-family: var(--font-display); }
-  .font-data { font-family: var(--font-data); }
 }
+
+/* ------------------------------------------------------------------ */
+/* Utilities                                                           */
+/* ------------------------------------------------------------------ */
 
 @layer utilities {
   @keyframes fade-in-up {
@@ -312,6 +437,10 @@
   }
   .motion-image:hover {
     transform: scale(1.02);
+  }
+  /* editorial-img — 统一图像灰度，跨来源视觉一致性 */
+  .editorial-img {
+    filter: saturate(0.92) contrast(0.98) brightness(0.985);
   }
 
   /* stagger — 列表交错入场 */

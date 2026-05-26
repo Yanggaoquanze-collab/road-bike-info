@@ -6,22 +6,22 @@ interface Props {
 }
 
 const colorMap = {
-  blue: "bg-[#2c5f8a]/10 text-[#2c5f8a] border-[#2c5f8a]/20",
-  purple: "bg-[#7c5aa8]/10 text-[#7c5aa8] border-[#7c5aa8]/20",
-  amber: "bg-[#e88a20]/10 text-[#e88a20] border-[#e88a20]/20",
-  green: "bg-[#4a9e6b]/10 text-[#4a9e6b] border-[#4a9e6b]/20",
-  red: "bg-[#d6403a]/10 text-[#d6403a] border-[#d6403a]/20",
-  default: "bg-bg-tertiary text-text-tertiary border-surface-border",
+  blue: "text-[#2c5f8a]",
+  purple: "text-[#7c5aa8]",
+  amber: "text-[#e88a20]",
+  green: "text-[#4a9e6b]",
+  red: "text-[#d6403a]",
+  default: "text-text-tertiary",
 };
 
 const sizeMap = {
-  sm: "px-2 py-0.5 text-xs",
-  md: "px-3 py-1 text-xs",
+  sm: "text-[11px]",
+  md: "text-xs",
 };
 
 const { label, color = "default", size = "md" } = Astro.props;
 ---
 
-<span class={`inline-block rounded-full border ${colorMap[color]} ${sizeMap[size]} font-medium`}>
+<span class={`${colorMap[color]} ${sizeMap[size]} font-medium`}>
   {label}
 </span>

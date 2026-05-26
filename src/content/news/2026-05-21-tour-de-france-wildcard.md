@@ -1,11 +1,13 @@
 ---
 title: "2026环法外卡名单公布：两支法国车队获邀"
+image: "/images/editorial/race/2026-tour-wildcard-peloton.jpg"
 date: 2026-05-21
 author: "manual"
 source: "ASO 官方"
 sourceUrl: "https://www.letour.fr"
 tags: ["Tour de France", "外卡", "ASO"]
 summary: "环法主办方 ASO 公布了2026年环法自行车赛的两张外卡邀请，法国车队 TotalEnergies 和 Tudor Pro Cycling 获得邀请。本届环法将于7月4日在哥本哈根发车。"
+pullQuote: "2026年环法共22支车队参赛，每队8名车手，总计176名车手。"
 draft: false
 ---
 

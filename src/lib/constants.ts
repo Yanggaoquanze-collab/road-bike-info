@@ -40,7 +40,7 @@ export const MAINTENANCE_CATEGORIES = {
 } as const;
 
 export const DIFFICULTY = {
-  easy: { label: "简单", color: "green" },
-  medium: { label: "中等", color: "amber" },
-  hard: { label: "较难", color: "red" },
+  easy: { label: "Easy", color: "green" },
+  medium: { label: "Moderate", color: "amber" },
+  hard: { label: "Advanced", color: "red" },
 } as const;
